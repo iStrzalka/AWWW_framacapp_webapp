@@ -1,0 +1,194 @@
+.body {
+    color: var(--text-color);
+}
+
+.div {
+    position: fixed;
+    padding-top: 10px;
+    padding-left: 10px;
+    height: 100%;
+    width: 100%;
+}
+
+.menu {
+    top: 0%;
+    left: 0%;
+    height: 4%;
+    padding-top: 0px;
+    padding-left: 0px;
+    background-color: var(--menu-color);
+}
+
+.filecontent {
+    width:100%;
+    height:100%;
+    border:0;
+    background-color: var(--container-color);
+    box-shadow:4px 4px 10px rgba(0,0,0,0.06);
+    color: var(--text-color);
+}
+
+ul, li {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+
+.sub_cat_box {display: none;}
+
+.filecontent:focus {
+    outline:0;
+}
+
+.file-container {
+    top: 4%;
+    left: 0%;
+    right: 80%;
+    width: 20%;
+    background-color: var(--file-container-color);
+}
+
+.content-container {
+    top: 4%;
+    left: 20%;
+    right: 15%;
+    bottom: 25%;
+    width: 65%;
+    height:70%;
+    padding-top: 0px;
+    background-color: var(--container-color);
+}
+
+.tab-selection {
+    top: 74%;
+    bottom:24%;
+    left:20%;
+    height: 4%;
+    padding-top: 0px;
+    padding-left: 0px;
+    background-color: var(--tab-selection-color);
+}
+
+.tab-data {
+    top: 78%;
+    left: 20%;
+    background-color: var(--tab-data-color);
+    overflow: scroll;
+}
+
+/*result {*/
+/*    overflow-y: scroll;*/
+/*    height: 100px;*/
+/*}*/
+
+.program-elements {
+    top: 4%;
+    bottom: 25%;
+    left: 60%;
+    width:40%;
+    height:70%;
+    padding-top: 0px;
+    overflow-y: auto;
+    background-color: var(--program-elements-color);
+}
+
+.tab {
+    height: 100%;
+    float: left;
+    background-color: transparent;
+    border: transparent;
+    color: var(--text-color);
+}
+
+.app-elements-section pre {
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    user-select: text;
+    padding: 8px 4px;
+}
+
+.app-elements-section {
+    /*border-left-color: yellow;*/
+    display: flex;
+    padding:0px;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+}
+
+.Valid {
+    border-left: 6px solid lightgreen;
+}
+
+.Unknown {
+    border-left: 6px solid red;
+}
+
+label{
+    margin-right: 40em; /* or larger if you need */
+}
+
+/* Version from moodle */
+/* :root { 
+    --menu-color: lightgray;
+    --file-container-color: lightblue;
+    --container-color: lightslategray;
+    --tab-selection-color: lightcoral;
+    --tab-data-color: green;
+    --program-elements-color: lightpink;
+} */
+
+/* Dark Version */
+:root { 
+    --menu-color: #404040;
+    --file-container-color: #606060;
+    --container-color: #333333;
+    --tab-selection-color: #606060;
+    --tab-data-color: #333333;
+    --program-elements-color: #404040;
+    --text-color: #A0A0A0;
+}
+
+
+/* Purple version / Mobile version */
+@media only screen and (max-width: 674px) {
+    :root {
+        --menu-color: #4C0099;
+        --file-container-color: #6600CC;
+        --container-color: #2B0057;
+        --tab-selection-color: #6600CC;
+        --tab-data-color: #2B0057;
+        --program-elements-color: #6600CC;
+        --text-color: #9933FF;
+    }
+
+    .file-container {
+        top: 74%;
+        width: 25%;
+    }
+    
+    .content-container {
+        left: 0%;
+        right: 0%;
+        width: 100%;
+    }
+    
+    .tab-selection {
+        left: 25%;
+        right: 15%;
+        width: 55%;
+    }
+
+    .tab-data {
+        left: 25%;
+        right: 15%;
+        width: 55%;
+    }
+
+    .program-elements {
+        top: 74%;
+        width: 20%;
+        left: 80%;
+        padding-top: 10px;
+    }
+
+}

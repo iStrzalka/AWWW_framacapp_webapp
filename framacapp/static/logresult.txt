@@ -1,0 +1,33 @@
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_2_preserved : Failed
+Command 'why3' not found
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_established : Failed
+Command 'why3' not found
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_preserved : Failed
+Command 'why3' not found
+[wp] [Alt-Ergo] Goal typed_insert_sort_post : Failed
+Command 'why3' not found
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_3_preserved : Failed
+Command 'why3' not found
+[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_mem_access : Failed
+Command 'why3' not found
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_2_established : Failed
+Command 'why3' not found
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_5_preserved : Failed
+Command 'why3' not found
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_6_preserved : Failed
+Command 'why3' not found
+[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_signed_overflow : Failed
+Command 'why3' not found
+[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_mem_access_2 : Failed
+Command 'why3' not found
+[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_mem_access_3 : Failed
+Command 'why3' not found
+[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_mem_access_5 : Failed
+Command 'why3' not found
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_term_decrease : Failed
+Command 'why3' not found
+[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_signed_overflow_4 : Failed
+Command 'why3' not found
+[wp] Proved goals:   11 / 26
+Qed:            11  (16ms)
+Alt-Ergo:        0  (failed: 15)

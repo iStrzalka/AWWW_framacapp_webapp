@@ -1,0 +1,11 @@
+[wp] [Alt-Ergo] Goal typed_insert_sort_post : Unknown (68ms)
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_preserved : Unknown (Qed:16ms) (187ms)
+[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_mem_access : Unknown (Qed:16ms) (119ms)
+[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_mem_access_2 : Unknown (Qed:16ms) (127ms)
+[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_mem_access_3 : Unknown (Qed:16ms) (194ms)
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_term_decrease : Unknown (Qed:16ms) (130ms)
+[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_signed_overflow_4 : Unknown (126ms)
+[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_mem_access_5 : Unknown (Qed:16ms) (185ms)
+[wp] Proved goals:   18 / 26
+Qed:            11  (16ms)
+Alt-Ergo:        7  (16ms-83ms-219ms) (480) (unknown: 8)

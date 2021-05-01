@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html style="height: 100%" lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Title</title>
+    <script src="{% static 'js/main.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body style="position: relative; min-height: 100%; top: 0px; background-color: #606060; color:white" class="body">
+<br><h1>Upload new file:</h1>
+<form enctype="multipart/form-data" method="post"> {% csrf_token %}
+    {% for field in form %}
+    <p>{{ field.label_tag }} <br> {{ field }}</p>
+    {% endfor %}
+    <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>
