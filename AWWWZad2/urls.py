@@ -16,15 +16,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from framacapp.views import home_view, add_dir_view,\
-    add_file_view, remove_file_dir_view, get_result, run_prover, load_file
+    add_file_view, remove_file_dir_view, get_result, run_prover, load_file, \
+    add_file, add_filep, add_dir, add_dirp, remove, removep, reload_tree
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('add_file/', add_file_view),
-    path('add_directory/', add_dir_view),
-    path('remove_file_dir/', remove_file_dir_view),
+    path('add_file/', add_file),
+    path('add_filep/', add_filep),
+    path('add_dir/', add_dir),
+    path('add_dirp/', add_dirp),
+    path('remove/', remove),
+    path('removep/', removep),
     path('run_prover/', run_prover),
     path('get_result/', get_result),
     path('load_file/', load_file),
+    path('reload_tree/', reload_tree),
     path('', home_view)
 ]

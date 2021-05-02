@@ -1,7 +1,11 @@
 import json
+from time import sleep
 
 from django.shortcuts import render
 import os
+
+from django.views.decorators.csrf import csrf_exempt
+
 from .models import *
 from django.shortcuts import get_object_or_404
 from django.http import Http404, HttpResponse
@@ -261,6 +265,172 @@ def load_file(request):
         raise Http404
 
 
+def add_file(request):
+    if request.is_ajax() and request.POST:
+        whole_form = ""
+        whole_form += '<p><label for="id_name">Name:</label><br>'
+        whole_form += '<textarea name="name" cols="40" rows="2" maxlength"40" required id="id_name"></textarea></p>'
+
+        whole_form += '<p><label for="id_parent">Parent:</label> <br>' \
+                      '<select name="parent" id="id_parent">' \
+                      '<option value="" selected>---------</option>'
+        for possible_parent in Directory.objects.filter(availability_flag=True):
+            whole_form += f'<option value="{possible_parent.id}">{str(possible_parent)}</option>'
+        whole_form += '</select></p>'
+
+        whole_form += '<p><label for="id_description">Description:</label> <br> ' \
+                      '<textarea name="description" cols="40" rows="5" id="id_description"></textarea></p>'
+
+        whole_form += '<p><label for="id_owner">Owner:</label> <br> <select name="owner" required id="id_owner">' \
+                      '<option value="" selected>---------</option>'
+        for possible_owner in User.objects.all():
+            whole_form += f'<option value="{possible_owner.id}">{str(possible_owner)}</option>'
+        whole_form += '</select></p>'
+
+        whole_form += '<p><label for="id_Provide_file">Provide file:</label> <br> ' \
+                      '<input type="file" name="Provide_file" required id="id_Provide_file"></p>'
+
+        whole_form += '<input type="button" onclick="add_filep()" value="Submit">'
+        data = {'form': whole_form}
+        return HttpResponse(json.dumps(data), content_type='application/json')
+    else:
+        raise Http404
+
+
+@csrf_exempt
+def add_filep(request):
+    name = request.POST.get('name')
+    parent = request.POST.get('id_parent')
+    if parent:
+        parent = Directory.objects.get(id=parent)
+    description = request.POST.get('description)')
+    owner = request.POST.get('id_owner')
+    if owner:
+        owner = User.objects.get(id=owner)
+
+    filepath = f'{name}'
+    if parent:
+        obj = parent
+        while obj is not None:
+            filepath = f'{obj.name}/{filepath}'
+            obj = obj.parent
+
+    with open(f'framacapp/Files/{filepath}', 'wb+') as f:
+        for chunk in request.FILES.get('file').chunks():
+            f.write(chunk)
+
+    if parent:
+        File.objects.create(parent=parent, name=name, description=description, creation_date=datetime.now(),
+                            availability_flag=True, owner=owner)
+    else:
+        File.objects.create(name=name, description=description, creation_date=datetime.now(),
+                            availability_flag=True, owner=owner)
+    data = {'message': ''}
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+
+def add_dir(request):
+    if request.is_ajax() and request.POST:
+        whole_form = ""
+        whole_form += '<p><label for="id_name">Name:</label><br>'
+        whole_form += '<textarea name="name" cols="40" rows="2" maxlength"40" required id="id_namedir"></textarea></p>'
+
+        whole_form += '<p><label for="id_parent">Parent:</label> <br>' \
+                      '<select name="parent" id="id_parentdir">' \
+                      '<option value="" selected>---------</option>'
+        for possible_parent in Directory.objects.filter(availability_flag=True):
+            whole_form += f'<option value="{possible_parent.id}">{str(possible_parent)}</option>'
+        whole_form += '</select></p>'
+
+        whole_form += '<p><label for="id_description">Description:</label> <br> ' \
+                      '<textarea name="description" cols="40" rows="5" id="id_descriptiondir"></textarea></p>'
+
+        whole_form += '<p><label for="id_owner">Owner:</label> <br> <select name="owner" required id="id_ownerdir">' \
+                      '<option value="" selected>---------</option>'
+        for possible_owner in User.objects.all():
+            whole_form += f'<option value="{possible_owner.id}">{str(possible_owner)}</option>'
+        whole_form += '</select></p>'
+
+        whole_form += '<input type="button" onclick="add_dirp()" value="Submit">'
+        data = {'form': whole_form}
+        return HttpResponse(json.dumps(data), content_type='application/json')
+    else:
+        raise Http404
+
+
+@csrf_exempt
+def add_dirp(request):
+    name = request.POST.get('name')
+    parent = request.POST.get('id_parent')
+    if parent:
+        parent = Directory.objects.get(id=parent)
+    description = request.POST.get('description)')
+    owner = request.POST.get('id_owner')
+    if owner:
+        owner = User.objects.get(id=owner)
+
+    filepath = f'{name}/'
+    if parent:
+        obj = parent
+        while obj is not None:
+            filepath = f'{obj.name}/{filepath}'
+            obj = obj.parent
+
+    os.mkdir(f'{path_to_app}/Files/{filepath}')
+
+    if parent:
+        Directory.objects.create(parent=parent, name=name, description=description, creation_date=datetime.now(),
+                                 availability_flag=True, owner=owner)
+    else:
+        Directory.objects.create(name=name, description=description, creation_date=datetime.now(),
+                                 availability_flag=True, owner=owner)
+    data = {'message': ''}
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+
+def remove(request):
+    if request.is_ajax() and request.POST:
+        whole_form = ""
+        whole_form += '<p><label for="id_Remove_Directory">Remove directory:</label><br>' \
+                      '<select name="Remove_Directory" required id="id_Remove_Directory">' \
+                      '<option value="" selected>---------</option>'
+
+        for directory in Directory.objects.filter(availability_flag=True):
+            whole_form += f'<option value="{directory.id}">{str(directory)}</option>'
+        whole_form += '</select></p>'
+
+        whole_form += '<input type="button" onclick="remove(\'dir\')" value="Submit">'
+
+        whole_form += '<p><label for="id_Remove_File">Remove file:</label><br>' \
+                      '<select name="Remove_File" required id="id_Remove_File">' \
+                      '<option value="" selected>---------</option>'
+
+        for file in File.objects.filter(availability_flag=True):
+            whole_form += f'<option value="{file.id}">{str(file)}</option>'
+        whole_form += '</select></p>'
+
+        whole_form += '<input type="button" onclick="remove(\'file\')" value="Submit">'
+        data = {'form': whole_form}
+        return HttpResponse(json.dumps(data), content_type='application/json')
+    else:
+        raise Http404
+
+
+def removep(request):
+    if request.is_ajax():
+        id = request.POST.get('id')
+        if not id:
+            id = -1
+        if request.POST.get('isfile') is True:
+            File.objects.filter(id=id).delete()
+        else:
+            Directory.objects.filter(id=id).delete()
+        data = {'message': ''}
+        return HttpResponse(json.dumps(data), content_type='application/json')
+    else:
+        raise Http404
+
+
 def add_file_view(request, *args, **kwargs):
     form = FileForm(request.POST or None, request.FILES or None)
     if form.is_valid():
@@ -283,6 +453,15 @@ def add_file_view(request, *args, **kwargs):
         'form': form
     }
     return render(request, "add_file.html", context)
+
+
+def reload_tree(request):
+    if request.is_ajax():
+        sleep(1)
+        data = {'tree': list_files("./framacapp/Files")}
+        return HttpResponse(json.dumps(data), content_type='application/json')
+    else:
+        raise Http404
 
 
 def add_dir_view(request, *args, **kwargs):

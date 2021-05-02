@@ -24,7 +24,6 @@ class Directory(models.Model):
 
 
 class File(models.Model):
-    # path_to_file = models.TextField(max_length=40, default="")
     parent = models.ForeignKey(Directory, on_delete=models.CASCADE, blank=True, null=True)
     name = models.TextField(max_length=40)
     description = models.TextField(blank=True, null=True)

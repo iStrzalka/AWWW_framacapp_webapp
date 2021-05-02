@@ -6,95 +6,23 @@ framacapp/Files/filename.c:7:[kernel] warning: parsing obsolete ACSL construct '
 framacapp/Files/filename.c:28:[wp] warning: Missing assigns clause (assigns 'everything' instead)
 framacapp/Files/filename.c:18:[wp] warning: Missing assigns clause (assigns 'everything' instead)
 [wp] 17 goals scheduled
-------------------------------------------------------------
---- Why3 (stderr) :
-------------------------------------------------------------
-[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
-No prover in /root/.why3.conf corresponds to "Z3"
-
-------------------------------------------------------------
-------------------------------------------------------------
---- Why3 (stderr) :
-------------------------------------------------------------
-[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
-No prover in /root/.why3.conf corresponds to "Z3"
-
-------------------------------------------------------------
-------------------------------------------------------------
---- Why3 (stderr) :
-------------------------------------------------------------
-[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
-No prover in /root/.why3.conf corresponds to "Z3"
-
-------------------------------------------------------------
-------------------------------------------------------------
---- Why3 (stderr) :
-------------------------------------------------------------
-[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
-No prover in /root/.why3.conf corresponds to "Z3"
-
-------------------------------------------------------------
-[wp] [Z3] Goal typed_insert_sort_loop_inv_2_preserved : Failed
-     Why3 exits with status 1.
-[wp] [Z3] Goal typed_insert_sort_loop_inv_established : Failed
-     Why3 exits with status 1.
-[wp] [Z3] Goal typed_insert_sort_loop_inv_preserved : Failed
-     Why3 exits with status 1.
-[wp] [Z3] Goal typed_insert_sort_post : Failed
-     Why3 exits with status 1.
-[wp] [Qed] Goal typed_insert_sort_loop_inv_4_preserved : Valid
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_established : Valid
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_preserved : Unknown (327ms)
+[wp] [Alt-Ergo] Goal typed_insert_sort_post : Unknown (Qed:16ms) (324ms)
 [wp] [Qed] Goal typed_insert_sort_loop_inv_3_established : Valid
+[wp] [Qed] Goal typed_insert_sort_loop_inv_4_preserved : Valid
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_2_preserved : Valid
 [wp] [Qed] Goal typed_insert_sort_loop_inv_4_established : Valid
 [wp] [Qed] Goal typed_insert_sort_loop_inv_5_established : Valid
-------------------------------------------------------------
---- Why3 (stderr) :
-------------------------------------------------------------
-[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
-No prover in /root/.why3.conf corresponds to "Z3"
-
-------------------------------------------------------------
-------------------------------------------------------------
---- Why3 (stderr) :
-------------------------------------------------------------
-[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
-No prover in /root/.why3.conf corresponds to "Z3"
-
-------------------------------------------------------------
-------------------------------------------------------------
---- Why3 (stderr) :
-------------------------------------------------------------
-[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
-No prover in /root/.why3.conf corresponds to "Z3"
-
-------------------------------------------------------------
-[wp] [Z3] Goal typed_insert_sort_loop_inv_3_preserved : Failed
-     Why3 exits with status 1.
-[wp] [Z3] Goal typed_insert_sort_loop_inv_2_established : Failed
-     Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_2_established : Valid
 [wp] [Qed] Goal typed_insert_sort_loop_inv_6_established : Valid
-[wp] [Z3] Goal typed_insert_sort_loop_inv_5_preserved : Failed
-     Why3 exits with status 1.
-[wp] [Qed] Goal typed_insert_sort_loop_term_2_decrease : Valid
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_3_preserved : Valid
 [wp] [Qed] Goal typed_insert_sort_loop_term_positive : Valid
-------------------------------------------------------------
---- Why3 (stderr) :
-------------------------------------------------------------
-[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
-No prover in /root/.why3.conf corresponds to "Z3"
-
-------------------------------------------------------------
+[wp] [Qed] Goal typed_insert_sort_loop_term_2_decrease : Valid
 [wp] [Qed] Goal typed_insert_sort_loop_term_2_positive : Valid
-[wp] [Z3] Goal typed_insert_sort_loop_inv_6_preserved : Failed
-     Why3 exits with status 1.
-------------------------------------------------------------
---- Why3 (stderr) :
-------------------------------------------------------------
-[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
-No prover in /root/.why3.conf corresponds to "Z3"
-
-------------------------------------------------------------
-[wp] [Z3] Goal typed_insert_sort_loop_term_decrease : Failed
-     Why3 exits with status 1.
-[wp] Proved goals:    8 / 17
-     Qed:             8 
-     Z3:              0  (failed: 9)
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_6_preserved : Valid
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_5_preserved : Valid
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_term_decrease : Unknown (Qed:16ms) (271ms)
+[wp] Proved goals:   14 / 17
+     Qed:             8  (16ms)
+     Alt-Ergo:        6  (20ms-54ms-120ms) (unknown: 3)
