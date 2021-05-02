@@ -108,3 +108,47 @@ function remove() {
     document.getElementById("table2").deleteRow(index + 1)
     
 }
+
+$(document).ready(function() {
+    $('.add-todo').click(function() {
+       $.ajax({
+           type: "POST",
+           url: "/framacapp/test",
+           datatype: "json",
+           data: {"filename" : 'filename.c'},
+           success: function(data) {
+               alert(data.message);
+           }
+       })
+    });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method))
+    }
+
+    $.ajaxSetup({
+       crossDomain: false,
+       beforeSend: function(xhr, settings) {
+           if (!csrfSafeMethod(settings.type)) {
+               xhr.setRequestHeader("X-CSRFTOKEN", csrftoken)
+           }
+       }
+    });
+});

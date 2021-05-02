@@ -7,8 +7,8 @@ framacapp/Files/filename.c:28:[wp] warning: Missing assigns clause (assigns 'eve
 framacapp/Files/filename.c:18:[wp] warning: Missing assigns clause (assigns 'everything' instead)
 [wp] 17 goals scheduled
 [wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_established : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_preserved : Unknown (73ms)
-[wp] [Alt-Ergo] Goal typed_insert_sort_post : Unknown (69ms)
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_preserved : Unknown (Qed:16ms) (74ms)
+[wp] [Alt-Ergo] Goal typed_insert_sort_post : Unknown (71ms)
 [wp] [Qed] Goal typed_insert_sort_loop_inv_3_established : Valid
 [wp] [Qed] Goal typed_insert_sort_loop_inv_4_preserved : Valid
 [wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_2_preserved : Valid
@@ -22,10 +22,10 @@ framacapp/Files/filename.c:18:[wp] warning: Missing assigns clause (assigns 'eve
 [wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_5_preserved : Valid
 [wp] [Qed] Goal typed_insert_sort_loop_term_2_positive : Valid
 [wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_6_preserved : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_term_decrease : Unknown (Qed:16ms) (96ms)
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_term_decrease : Unknown (Qed:16ms) (66ms)
 [wp] Proved goals:   14 / 17
      Qed:             8  (16ms)
-     Alt-Ergo:        6  (16ms-59ms-125ms) (358) (unknown: 3)
+     Alt-Ergo:        6  (16ms-59ms-141ms) (358) (unknown: 3)
 ------------------------------------------------------------
   Function insert_sort
 ------------------------------------------------------------
@@ -48,7 +48,7 @@ Assume {
   }
 }
 Prove: P_Sorted(Mint_0, t, 0, n - 1).
-Prover Alt-Ergo returns Unknown (69ms)
+Prover Alt-Ergo returns Unknown (71ms)
 
 ------------------------------------------------------------
 
@@ -86,7 +86,7 @@ Assume {
   }
 }
 Prove: (i < n) /\ ((-1) <= i).
-Prover Alt-Ergo returns Unknown (73ms)
+Prover Alt-Ergo returns Unknown (Qed:16ms) (74ms)
 
 ------------------------------------------------------------
 
@@ -101,7 +101,7 @@ Assume {
   Have: 2 <= n.
 }
 Prove: 0 < n.
-Prover Alt-Ergo returns Valid (Qed:16ms) (16ms) (10)
+Prover Alt-Ergo returns Valid (16ms) (10)
 
 ------------------------------------------------------------
 
@@ -135,7 +135,7 @@ Assume {
   Then { (* Then *) Have: Mint_0[shift_sint32(t, j - 1)] <= mv_0. }
 }
 Prove: P_Sorted(Mint_0[shift_sint32(t, j) <- mv_0], t, 0, x).
-Prover Alt-Ergo returns Valid (125ms) (348)
+Prover Alt-Ergo returns Valid (Qed:16ms) (141ms) (348)
 
 ------------------------------------------------------------
 
@@ -150,7 +150,7 @@ Assume {
   Have: 2 <= n.
 }
 Prove: P_Sorted(Mint_0, t, 0, 1).
-Prover Alt-Ergo returns Valid (Qed:16ms) (16ms) (11)
+Prover Alt-Ergo returns Valid (11)
 
 ------------------------------------------------------------
 
@@ -188,7 +188,7 @@ Assume {
   Have: mv_0 < x_1.
 }
 Prove: j <= x_2.
-Prover Alt-Ergo returns Valid (28)
+Prover Alt-Ergo returns Valid (Qed:16ms) (16ms) (28)
 
 ------------------------------------------------------------
 
@@ -246,7 +246,7 @@ Assume {
   Have: mv_0 < x_1.
 }
 Prove: P_Sorted(Mint_0[shift_sint32(t, j) <- x_1], t, 0, x_2).
-Prover Alt-Ergo returns Valid (125ms) (358)
+Prover Alt-Ergo returns Valid (Qed:16ms) (109ms) (358)
 
 ------------------------------------------------------------
 
@@ -292,7 +292,7 @@ Assume {
   Have: mv_0 < x_1.
 }
 Prove: mv_0 < Mint_0[shift_sint32(t, j) <- x_1][shift_sint32(t, i)].
-Prover Alt-Ergo returns Valid (Qed:16ms) (16ms) (37)
+Prover Alt-Ergo returns Valid (16ms) (37)
 
 ------------------------------------------------------------
 
@@ -336,7 +336,7 @@ Assume {
   }
 }
 Prove: (i + n) <= (i_1 + n_1).
-Prover Alt-Ergo returns Unknown (Qed:16ms) (96ms)
+Prover Alt-Ergo returns Unknown (Qed:16ms) (66ms)
 
 ------------------------------------------------------------
 
@@ -348,7 +348,7 @@ Prover Qed returns Valid
 
 Goal Decreasing of Loop variant at loop (file framacapp/Files/filename.c, line 28):
 Prove: true.
-Prover Qed returns Valid (16ms)
+Prover Qed returns Valid
 
 ------------------------------------------------------------
 

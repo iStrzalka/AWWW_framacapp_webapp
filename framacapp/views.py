@@ -1,26 +1,20 @@
-import subprocess
-import asyncio
+import json
 
 from django.shortcuts import render
 import os
 from .models import *
 from django.shortcuts import get_object_or_404
-from django.http import Http404
-import io
+from django.http import Http404, HttpResponse
 from .forms import DirectoryForm, FileForm, RemoveDirForm, RemoveFileForm
 
 from datetime import datetime
 
+path_to_app = './framacapp'
+path_to_linux = 'C:\\Windows\\System32\\wsl.exe'
+
 
 # Create your views here.
-def user_view(request, *args, **kwargs):
-    user = User.objects.get(id=1)
-    context = {
-        'name': user.name
-    }
-    return render(request, "user.html", context)
-
-
+# Checks whether directory or file is in database and whether it should be shown.
 def check_dir(name, isfile):
     obj = None
     if isfile:
@@ -46,30 +40,26 @@ def check_dir(name, isfile):
     return True
 
 
-def list_files(startpath):
+# Lists files from path.
+def list_files(path):
     ret_str = "Files:<ul>"
     last_level = 0
     number = 0
-    for root, dirs, files in os.walk(startpath):
-        level = root.replace(startpath, '').count(os.sep)
+    for root, dirs, files in os.walk(path):
+        level = root.replace(path, '').count(os.sep)
         if not check_dir(os.path.basename(root), False) and level != 0:
             continue
         if level == 0:
             # ret_str += f'<li class="current">{indent}{os.path.basename(root)}/</li><ul>'
             pass
-        elif last_level < level:
-            ret_str += f'<li class="current" onclick="toggleChildren(\'List{number}\')" ' \
-                       f'style="list-style-image:url(/static/icons/folder.jpg); height:\'20px\'">'
-            ret_str += f'{os.path.basename(root)}/</li>'
-            ret_str += f'<div class="sub_cat_box" id="List{number}"><ul>'
-            number += 1
         else:
-            ret_str += '</ul></div>' * (last_level - level + 1)
+            if last_level >= level:
+                ret_str += '</ul></div>' * (last_level - level + 1)
             ret_str += f'<li class="current" onclick="toggleChildren(\'List{number}\')" ' \
                        f'style="list-style-image:url(/static/icons/folder.jpg); height:\'20px\'">' \
                        f'{os.path.basename(root)}/</li>'
             ret_str += f'<div class="sub_cat_box" id="List{number}"><ul>'
-            number += 1
+        number += 1
         last_level = level
         for f in files:
             if not check_dir(f, True):
@@ -88,19 +78,14 @@ def home_view(request, *args, **kwargs):
     return render(request, "main.html", context)
 
 
-def upload_file_view(request, *args, **kwargs):
-    context = {
-
-    }
-    return render(request, "uploadfile.html", context)
-
-
+# Returns empty string if object is not empty.
 def ifNoneEmpty(obj):
     if obj is None:
         return ""
     return obj
 
 
+# Performs coloring on the string.
 def perform_coloring(input_string):
     input_string = input_string.replace('\n', '<br>')
     input_string = input_string.replace('Valid', '<b style="color:green">Valid</b>')
@@ -113,62 +98,60 @@ def perform_coloring(input_string):
     return input_string
 
 
-def group_program_elements(str):
-    iter = str.find('------------------------------------------------------------') + 61
-    if iter == 60:
-        return str
-    str = str.replace('<br>', '\n')
-    iter = str.find('------------------------------------------------------------', iter) + 62
+# Groups program elements.
+def group_program_elements(program_elements):
+    iter1 = program_elements.find('------------------------------------------------------------') + 61
+    if iter1 == 60:
+        return program_elements
+    program_elements = program_elements.replace('<br>', '\n')
+    iter1 = program_elements.find('------------------------------------------------------------', iter1) + 62
 
-    str = str[iter:]
+    program_elements = program_elements[iter1:]
     ret = ""
-    for group in str.split('\n------------------------------------------------------------\n'):
+    for group in program_elements.split('\n------------------------------------------------------------\n'):
         if group == '':
             break
-        iter = group.find('Goal') + 5
-        iter2 = group.find('(', iter) - 1
+        iter1 = group.find('Goal') + 5
+        iter2 = group.find('(', iter1) - 1
         proved = 'Unknown'
         if 'Valid' in group:
             proved = 'Valid'
-        ret += f'<div class="app-elements-section {proved}"><pre class title="{group[iter:iter2]}">'
+        ret += f'<div class="app-elements-section {proved}"><pre class title="{group[iter1:iter2]}">'
         ret += group
         ret += '</pre></div>'
     return ret
 
 
-def file_view(request, filename, *args, **kwargs):
-    file = get_object_or_404(File, name=filename)
-
-    if not file.availability_flag:
-        raise Http404
-
-    filepath = f'{filename}'
+def get_content_from_file(file, path):
+    filepath = f'{path}'
 
     obj = file
-    while obj.parent != None:
+    while obj.parent is not None:
         parent = obj.parent
         filepath = f'{parent.name}/{filepath}'
         if not parent.availability_flag:
             raise Http404
         obj = parent
 
-    filecontent = ""
+    ret = ""
     with open(f'./framacapp/Files/{filepath}') as f:
-        filecontent += f.read()
+        ret += f.read()
+    return ret
 
+
+def get_program_elements(path):
     program_elements = ""
-
-    path = os.getcwd() + '\\framacapp\\Files\\' + filepath
-
     os.system(
-        f'C:\Windows\System32\wsl.exe frama-c -wp -wp-print ./framacapp/Files/{filepath} >./framacapp/static/log/lastfile.txt')
+        f'{path_to_linux} frama-c -wp -wp-print ./framacapp/Files/{path} >./framacapp/static/log/lastfile.txt')
 
-    with open('./framacapp/static/log/lastfile.txt') as f:
+    with open(f'{path_to_app}/static/log/lastfile.txt') as f:
         program_elements += f.read()
+    program_elements = perform_coloring(program_elements)
+    program_elements = group_program_elements(program_elements)
+    return program_elements
 
-    for item in request.POST.items():
-        print(item)
 
+def get_result_tab(request, filepath):
     prover = ifNoneEmpty(request.POST.get("prover_name"))
     if prover != '':
         prover = f' -wp-prover {prover} '
@@ -182,20 +165,36 @@ def file_view(request, filename, *args, **kwargs):
     result = ''
     if prover + wp_rte + wp_propflag != '':
         os.system(
-            f'C:\Windows\System32\wsl.exe frama-c -wp -wp-log="r:./framacapp/static/log/result.txt" {wp_rte} {prover} {wp_propflag}'
-            f' ./framacapp/Files/{filepath} >./framacapp/static/log/useless.txt')
+            f'{path_to_linux} frama-c -wp -wp-log="r:{path_to_app}/static/log/result.txt" {wp_rte} {prover} {wp_propflag}'
+            f' {path_to_app}/Files/{filepath} >{path_to_app}/static/log/useless.txt')
 
         with open('./framacapp/static/log/result.txt') as f:
             result += f.read()
+    return perform_coloring(result)
 
-    program_elements = perform_coloring(program_elements)
-    result = perform_coloring(result)
 
-    program_elements = group_program_elements(program_elements)
+def get_result(request):
+    print("was here")
+    if request.is_ajax() and request.POST:
+        result = get_result_tab(request, request.POST.get('filename'))
+        return HttpResponse(json.dumps(result), content_type='application/json')
+    else:
+        raise Http404
+
+
+def file_view(request, filename, *args, **kwargs):
+    file = get_object_or_404(File, name=filename)
+
+    if not file.availability_flag:
+        raise Http404
+
+    content = get_content_from_file(file, filename)
+    program_elements = get_program_elements(filename)
+    result = get_result_tab(request, filename)
 
     context = {
         'Files': list_files("./framacapp/Files"),
-        'filecontent': filecontent,
+        'filecontent': content,
         'programelements': program_elements,
         'result': result,
         'resulturl': f"/file/{filename}",
@@ -206,14 +205,14 @@ def file_view(request, filename, *args, **kwargs):
 def add_file_view(request, *args, **kwargs):
     form = FileForm(request.POST or None, request.FILES or None)
     if form.is_valid():
-        dir = form.save(commit=False)
-        dir.creation_date = datetime.now()
-        dir.availability_flag = True
-        dir.save()
+        file = form.save(commit=False)
+        file.creation_date = datetime.now()
+        file.availability_flag = True
+        file.save()
 
-        filepath = f'{dir.name}'
-        obj = dir
-        while obj.parent != None:
+        filepath = f'{file.name}'
+        obj = file
+        while obj.parent is not None:
             parent = obj.parent
             filepath = f'{parent.name}/{filepath}'
             obj = parent
@@ -230,14 +229,14 @@ def add_file_view(request, *args, **kwargs):
 def add_dir_view(request, *args, **kwargs):
     form = DirectoryForm(request.POST or None)
     if form.is_valid():
-        dir = form.save(commit=False)
-        dir.creation_date = datetime.now()
-        dir.availability_flag = True
-        dir.save()
+        directory = form.save(commit=False)
+        directory.creation_date = datetime.now()
+        directory.availability_flag = True
+        directory.save()
 
-        filepath = f'{dir.name}'
-        obj = dir
-        while obj.parent != None:
+        filepath = f'{directory.name}'
+        obj = directory
+        while obj.parent is not None:
             parent = obj.parent
             filepath = f'{parent.name}/{filepath}'
             obj = parent
@@ -252,21 +251,14 @@ def add_dir_view(request, *args, **kwargs):
 def remove_file_dir_view(request, *args, **kwargs):
     form = RemoveDirForm(request.POST or None)
     if form.is_valid():
-        # form.save()
         obj = form.cleaned_data['Remove_Directory']
         obj.availability_flag = False
         obj.save()
-        print(obj)
-        # obj.save()
         form = RemoveDirForm()
 
     form2 = RemoveFileForm(request.POST or None)
     if form2.is_valid():
-        # obj = form2.save(commit=False)
-        # obj.availability_flag = False
-        # obj.save()
         obj = form2.cleaned_data['Remove_File']
-        print(obj)
         obj.availability_flag = False
         obj.save()
         form2 = RemoveFileForm()
