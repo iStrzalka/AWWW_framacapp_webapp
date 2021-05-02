@@ -1,3 +1,4 @@
+var current_filename = ""
 var prover = ""
 var wp_rte = ""
 var wp_prop = ""
@@ -20,10 +21,6 @@ function toggleList(a){
     }
 }
 
-function performAction() {
-    document.getElementById("result").innerHTML = prover + " " + wp_rte + " " + wp_prop
-}
-
 function toggleChildren(id) {
    var elem = document.getElementById(id)
    if(!elem) alert("error: not found!")
@@ -36,7 +33,6 @@ function toggleChildren(id) {
 }
 
 function changeProver(input_prover, id) {
-    document.getElementById('prover').value = input_prover
     prover = input_prover
     if (id === 0) {
         document.getElementById("Altbtn").innerHTML = "<b style=\"color:yellow;\">Alt-Ergo</b>"
@@ -55,73 +51,52 @@ function changeProver(input_prover, id) {
     }
 }
 
-function processFormVC() {
-    wp_prop = document.getElementById("wp_propflag").value
-    wp_rte = document.getElementById("wp_rte").value
-    wp_rte = document.getElementById("wp_rte").value
-    return false;
+function get_file_contents(filename) {
+    current_filename = filename;
+    $.ajax({
+           type: "POST",
+           url: "/load_file/",
+           datatype: "json",
+           data: {"filename" : filename},
+           success: function(data) {
+               document.getElementById('program-elements').innerHTML = data.program_elements;
+               document.getElementById('filecontent').innerHTML = data.content;
+           }
+    })
 }
 
-function processForm(){
-    var name = document.getElementById("idname").value
-    var age = document.getElementById("idage").value
-    var t = document.getElementById("table2")
-    var row = t.insertRow()
-    var c1 = row.insertCell()
-    c1.innerHTML = name
-    c1 = row.insertCell()
-    c1.innerHTML = age
 
-    var x = document.getElementById("select")
-    var option = document.createElement("option")
-    option.text = name + " - " + age
-    x.add(option)
-
-    var t = document.getElementById("table4")
-    var row = t.insertRow()
-    var c1 = row.insertCell()
-    c1.innerHTML = name
-    c1 = row.insertCell()
-    c1.innerHTML = age
-    c1 = row.insertCell()
-    c1.innerHTML = "Added"
-    return false
+function run_prover() {
+    document.getElementById('program-elements').innerHTML = "Processing request";
+    $.ajax({
+           type: "POST",
+           url: "/run_prover/",
+           datatype: "json",
+           data: {"filename" : current_filename},
+           success: function(data) {
+               document.getElementById('program-elements').innerHTML = data.result;
+           }
+    })
 }
 
-function remove() {
-    var select = document.getElementById("select")
-    var index = select.options.selectedIndex
-
-    var input = select.options[index].value
-    var name = input.split(" ")[0]
-    var age = input.split(" ")[2]
-
-    var row = t.insertRow()
-    var c1 = row.insertCell()
-    c1.innerHTML = name
-    c1 = row.insertCell()
-    c1.innerHTML = age
-    c1 = row.insertCell()
-    c1.innerHTML = "Deleted"
-
-    document.getElementById("select").remove(index)
-    document.getElementById("table2").deleteRow(index + 1)
-    
+function changeresult() {
+    document.getElementById('result').innerHTML = "Processing request";
+    $.ajax({
+           type: "POST",
+           url: "/get_result/",
+           datatype: "json",
+           data: {"filename" : current_filename,
+                  "prover" : prover,
+                  "wp_rte" : wp_rte,
+                  "wp_propflag" : wp_prop},
+           success: function(data) {
+               document.getElementById('result').innerHTML = data.result;
+           }
+    })
+    toggleList(3);
 }
 
 $(document).ready(function() {
-    $('.add-todo').click(function() {
-       $.ajax({
-           type: "POST",
-           url: "/framacapp/test",
-           datatype: "json",
-           data: {"filename" : 'filename.c'},
-           success: function(data) {
-               alert(data.message);
-           }
-       })
-    });
-
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {

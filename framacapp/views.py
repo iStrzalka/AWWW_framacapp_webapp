@@ -65,7 +65,7 @@ def list_files(path):
             if not check_dir(f, True):
                 continue
             ret_str += f'<li style="list-style-image:url(/static/icons/icon.png); height:\'20px\'" ' \
-                       f'onclick="location.href = \'/file/{f}\';">{f}</li>\n'
+                       f'onclick="get_file_contents(\'{f}\')">{f}</li>\n'
     ret_str += "</ul></div>" * last_level
     ret_str += "</ul>"
     return ret_str
@@ -122,16 +122,22 @@ def group_program_elements(program_elements):
     return ret
 
 
-def get_content_from_file(file, path):
-    filepath = f'{path}'
+def get_filepath(file):
+    path = file.name
 
     obj = file
     while obj.parent is not None:
         parent = obj.parent
-        filepath = f'{parent.name}/{filepath}'
+        path = f'{parent.name}/{path}'
         if not parent.availability_flag:
             raise Http404
         obj = parent
+
+    return path
+
+
+def get_content_from_file(file):
+    filepath = get_filepath(file)
 
     ret = ""
     with open(f'./framacapp/Files/{filepath}') as f:
@@ -139,7 +145,8 @@ def get_content_from_file(file, path):
     return ret
 
 
-def get_program_elements(path):
+def get_program_elements(file):
+    path = get_filepath(file)
     program_elements = ""
     os.system(
         f'{path_to_linux} frama-c -wp -wp-print ./framacapp/Files/{path} >./framacapp/static/log/lastfile.txt')
@@ -153,6 +160,7 @@ def get_program_elements(path):
 
 def get_result_tab(request, filepath):
     prover = ifNoneEmpty(request.POST.get("prover_name"))
+    prover = "Alt-Ergo"
     if prover != '':
         prover = f' -wp-prover {prover} '
     wp_rte = ifNoneEmpty(request.POST.get("wp_rte"))
@@ -173,33 +181,44 @@ def get_result_tab(request, filepath):
     return perform_coloring(result)
 
 
-def get_result(request):
-    print("was here")
+def run_prover(request):
     if request.is_ajax() and request.POST:
-        result = get_result_tab(request, request.POST.get('filename'))
-        return HttpResponse(json.dumps(result), content_type='application/json')
+        filename = request.POST.get('filename')
+        file = get_object_or_404(File, name=filename)
+
+        if not file.availability_flag:
+            raise Http404
+
+        result = get_program_elements(file)
+        data = {'result': result}
+        return HttpResponse(json.dumps(data), content_type='application/json')
     else:
         raise Http404
 
 
-def file_view(request, filename, *args, **kwargs):
-    file = get_object_or_404(File, name=filename)
-
-    if not file.availability_flag:
+def get_result(request):
+    if request.is_ajax() and request.POST:
+        result = get_result_tab(request, request.POST.get('filename'))
+        data = {'result': result}
+        return HttpResponse(json.dumps(data), content_type='application/json')
+    else:
         raise Http404
 
-    content = get_content_from_file(file, filename)
-    program_elements = get_program_elements(filename)
-    result = get_result_tab(request, filename)
 
-    context = {
-        'Files': list_files("./framacapp/Files"),
-        'filecontent': content,
-        'programelements': program_elements,
-        'result': result,
-        'resulturl': f"/file/{filename}",
-    }
-    return render(request, "main.html", context)
+def load_file(request):
+    if request.is_ajax() and request.POST:
+        filename = request.POST.get('filename')
+        file = get_object_or_404(File, name=filename)
+
+        if not file.availability_flag:
+            raise Http404
+
+        content = get_content_from_file(file)
+        program_elements = get_program_elements(file)
+        data = {'content': content, 'program_elements': program_elements}
+        return HttpResponse(json.dumps(data), content_type='application/json')
+    else:
+        raise Http404
 
 
 def add_file_view(request, *args, **kwargs):

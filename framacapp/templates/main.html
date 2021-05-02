@@ -6,7 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Title</title>
-    <script src="{% static 'js/main.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 </head>
 <body style="position: relative; min-height: 100%; top: 0px;" class="body">
@@ -15,15 +16,7 @@
         <button class="tab" onclick="location.href='/add_directory'">Add directory</button>
         <button class="tab" onclick="location.href='/add_file'">Add file</button>
         <button class="tab" onclick="location.href='/remove_file_dir'">Remove file</button>
-        <button class="tab add-todo">Add todo</button>
-{#        <button class="tab">File</button>#}
-{#        <button class="tab">Edit</button>#}
-{#        <button class="tab">Selection</button>#}
-{#        <button class="tab">View</button>#}
-{#        <button class="tab">Go</button>#}
-{#        <button class="tab">Run</button>#}
-{#        <button class="tab">Terminal</button>#}
-{#        <button class="tab">Help</button>#}
+        <button class="tab" onclick="run_prover()">Run prover</button>
     </div>
     
     <div class="div file-container">
@@ -32,8 +25,8 @@
     
     <div class="div content-container">
         <label>
-<textarea class="filecontent">
-{{ filecontent }}
+
+<textarea class="filecontent" id="filecontent">
 </textarea>
         </label>
     </div>
@@ -51,32 +44,18 @@
             <button class="tab" id="CVC4btn" style="width:100px; height:32px; background-color: #606060;" onclick="changeProver('CVC4', 2)">CVC4</button><br><br>
         </div>
         <div id="div2" style="display: none;">
-            <form id="myForm" action="{{ resulturl }}" method="POST"> {% csrf_token %}
-                <input name="prover_name" type="hidden"id="prover">
-                <table>
-                    <tr>
-                        <td> Enable/Disable wp_rte flag :</td>
-                        <td><input name="wp_rte" type="checkbox"></td>
-                    </tr>
-                    <tr>
-                        <td>Wp_prop flags : </td>
-                        <td><input name="wp_propflag" type="text" placeholder="wp_prop"></td>
-                    </tr>
-                </table>
-                <button type="submit" >Submit</button>
-            </form>
+            Enable/Disable wp_rte flag : <input name="wp_rte" type="checkbox"><br>
+            <input name="wp_propflag" type="text" placeholder="wp_prop"><br>
+            <button onclick="changeresult()" >Submit</button>
         </div>
         <div id="div3" style="display: none;">
-{#            <button onclick="performAction()" class="tab">Print result</button>#}
             <div id="result" style="overflow-y: scroll; height:200px">
-                {{ result | safe }}
             </div>
 
         </div>
     </div>
     
-    <div class="div program-elements">
-        {{ programelements | safe }}
+    <div class="div program-elements" id="program-elements">
     </div>
 
 </body>

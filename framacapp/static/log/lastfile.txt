@@ -1,359 +1,266 @@
 [kernel] Parsing FRAMAC_SHARE/libc/__fc_builtin_for_normalization.i (no preprocessing)
-[kernel] Parsing framacapp/Files/filename.c (with preprocessing)
-framacapp/Files/filename.c:7:[kernel] warning: parsing obsolete ACSL construct '\valid_range(addr,min,max)'. '\valid(addr+(min..max))' should be used instead.
+[kernel] Parsing framacapp/Files/test/sum_array.c (with preprocessing)
 [wp] Running WP plugin...
 [wp] warning: Missing RTE guards
-framacapp/Files/filename.c:28:[wp] warning: Missing assigns clause (assigns 'everything' instead)
-framacapp/Files/filename.c:18:[wp] warning: Missing assigns clause (assigns 'everything' instead)
-[wp] 17 goals scheduled
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_established : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_preserved : Unknown (Qed:16ms) (74ms)
-[wp] [Alt-Ergo] Goal typed_insert_sort_post : Unknown (71ms)
-[wp] [Qed] Goal typed_insert_sort_loop_inv_3_established : Valid
-[wp] [Qed] Goal typed_insert_sort_loop_inv_4_preserved : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_2_preserved : Valid
-[wp] [Qed] Goal typed_insert_sort_loop_inv_4_established : Valid
-[wp] [Qed] Goal typed_insert_sort_loop_inv_5_established : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_3_preserved : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_2_established : Valid
-[wp] [Qed] Goal typed_insert_sort_loop_inv_6_established : Valid
-[wp] [Qed] Goal typed_insert_sort_loop_term_positive : Valid
-[wp] [Qed] Goal typed_insert_sort_loop_term_2_decrease : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_5_preserved : Valid
-[wp] [Qed] Goal typed_insert_sort_loop_term_2_positive : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_6_preserved : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_term_decrease : Unknown (Qed:16ms) (66ms)
-[wp] Proved goals:   14 / 17
-     Qed:             8  (16ms)
-     Alt-Ergo:        6  (16ms-59ms-141ms) (358) (unknown: 3)
+framacapp/Files/test/sum_array.c:67:[wp] warning: Missing assigns clause (assigns 'everything' instead)
+framacapp/Files/test/sum_array.c:85:[wp] warning: Missing assigns clause (assigns 'everything' instead)
+[wp] 16 goals scheduled
+[wp] [Alt-Ergo] Goal typed_test1_loop_inv_preserved : Valid
+[wp] [Alt-Ergo] Goal typed_test1_loop_inv_established : Valid
+[wp] [Qed] Goal typed_test1_loop_term_decrease : Valid
+[wp] [Qed] Goal typed_test1_loop_term_positive : Valid
+[wp] [Alt-Ergo] Goal typed_test1_post : Timeout (10s)
+[wp] [Alt-Ergo] Goal typed_lemma_sum_footprint : Timeout (10s)
+[wp] [Alt-Ergo] Goal typed_lemma_sum3 : Timeout (10s)
+[wp] [Qed] Goal typed_test2_loop_inv_established : Valid
+[wp] [Alt-Ergo] Goal typed_test2_assert : Valid
+[wp] [Qed] Goal typed_test2_assign_part1 : Valid
+[wp] [Alt-Ergo] Goal typed_test2_assert_2 : Valid
+[wp] [Qed] Goal typed_test2_loop_term_decrease : Valid
+[wp] [Qed] Goal typed_test2_loop_term_positive : Valid
+[wp] [Alt-Ergo] Goal typed_test2_assign_part2 : Unknown (64ms)
+[wp] [Alt-Ergo] Goal typed_test2_post : Timeout (Qed:16ms) (10s)
+[wp] [Alt-Ergo] Goal typed_test2_loop_inv_preserved : Timeout (10s)
+[wp] Proved goals:   10 / 16
+     Qed:             6  (16ms)
+     Alt-Ergo:        4  (16ms-26ms-47ms) (81) (interrupted: 5) (unknown: 1)
 ------------------------------------------------------------
-  Function insert_sort
+  Global
 ------------------------------------------------------------
 
-Goal Post-condition (file framacapp/Files/filename.c, line 9) in 'insert_sort':
+Lemma sum3:
+Prove: (i_0<=j_0) -> (j_0<=k_0)
+       -> (((L_sum Mint_0 t_0 i_0 j_0)+(L_sum Mint_0 t_0 j_0 k_0))=
+           (L_sum Mint_0 t_0 i_0 k_0))
+Prover Alt-Ergo returns Timeout (10s)
+
+------------------------------------------------------------
+
+Lemma sum_footprint:
+Assume: 'sum3'
+Prove: (forall i_1:int.
+        (i_0<=i_1) -> (i_1<j_0)
+        -> (Mint_0[(shift_sint32 t2_0 i_1)]=Mint_0[(shift_sint32 t1_0 i_1)]))
+       -> ((L_sum Mint_0 t2_0 i_0 j_0)=(L_sum Mint_0 t1_0 i_0 j_0))
+Prover Alt-Ergo returns Timeout (10s)
+
+------------------------------------------------------------
+------------------------------------------------------------
+  Function test1
+------------------------------------------------------------
+
+Goal Post-condition (file framacapp/Files/test/sum_array.c, line 59) in 'test1':
+Let x = L_sum(Mint_0, t_1, 0, i).
 Assume {
-  Type: is_sint32(i) /\ is_sint32(n) /\ is_sint32(n_1).
+  Type: is_sint32(i) /\ is_sint32(n_1) /\ is_sint32(n) /\ is_sint32(x).
   (* Heap *)
   Have: (region(t.base) <= 0) /\ linked(Malloc_0).
   (* Pre-condition *)
-  Have: valid_rw(Malloc_0, shift_sint32(t, 0), n).
-  If n <= 1
-  Else {
-    (* Invariant *)
-    Have: P_Sorted(Mint_0, t_1, 0, i).
-    (* Invariant *)
-    Have: (0 <= i) /\ (i <= n_1).
-    (* Else *)
-    Have: n_1 <= i.
-  }
-}
-Prove: P_Sorted(Mint_0, t, 0, n - 1).
-Prover Alt-Ergo returns Unknown (71ms)
-
-------------------------------------------------------------
-
-Goal Preservation of Invariant (file framacapp/Files/filename.c, line 14):
-Let x = 1 + i.
-Assume {
-  Type: is_sint32(i_1) /\ is_sint32(i) /\ is_sint32(j) /\ is_sint32(mv_0) /\
-      is_sint32(n_1) /\ is_sint32(n) /\ is_sint32(n_2) /\ is_sint32(x).
-  (* Heap *)
-  Have: (region(t.base) <= 0) /\ linked(Malloc_0).
-  (* Pre-condition *)
-  Have: valid_rw(Malloc_0, shift_sint32(t, 0), n_1).
-  (* Else *)
-  Have: 2 <= n_1.
-  (* Invariant *)
-  Have: P_Sorted(Mint_0, t_1, 0, i_1).
-  (* Invariant *)
-  Have: (0 <= i_1) /\ (i_1 <= n_2).
-  (* Then *)
-  Have: i_1 < n_2.
-  (* Invariant *)
-  Have: forall i_2 : Z. ((i_2 < i) -> ((j <= i_2) ->
-      (mv_1 < Mint_1[shift_sint32(t_2, i_2)]))).
-  (* Invariant *)
-  Have: ((j < i) -> P_Sorted(Mint_1, t_2, 0, x)).
-  (* Invariant *)
-  Have: ((j = i) -> P_Sorted(Mint_1, t_2, 0, i)).
-  (* Invariant *)
-  Have: (j <= i) /\ (0 <= j).
-  If 0 < j
-  Then {
-    Have: (Mint_1 = Mint_2) /\ (mv_1 = mv_0) /\ (t_2 = t_3).
-    (* Then *)
-    Have: Mint_2[shift_sint32(t_3, j - 1)] <= mv_0.
-  }
-}
-Prove: (i < n) /\ ((-1) <= i).
-Prover Alt-Ergo returns Unknown (Qed:16ms) (74ms)
-
-------------------------------------------------------------
-
-Goal Establishment of Invariant (file framacapp/Files/filename.c, line 14):
-Assume {
-  Type: is_sint32(n).
-  (* Heap *)
-  Have: (region(t.base) <= 0) /\ linked(Malloc_0).
-  (* Pre-condition *)
-  Have: valid_rw(Malloc_0, shift_sint32(t, 0), n).
-  (* Else *)
-  Have: 2 <= n.
-}
-Prove: 0 < n.
-Prover Alt-Ergo returns Valid (16ms) (10)
-
-------------------------------------------------------------
-
-Goal Preservation of Invariant (file framacapp/Files/filename.c, line 16):
-Let x = 1 + i.
-Assume {
-  Type: is_sint32(i_1) /\ is_sint32(i) /\ is_sint32(j) /\ is_sint32(n) /\
-      is_sint32(n_1) /\ is_sint32(x).
-  (* Heap *)
-  Have: (region(t_1.base) <= 0) /\ linked(Malloc_0).
-  (* Pre-condition *)
-  Have: valid_rw(Malloc_0, shift_sint32(t_1, 0), n).
-  (* Else *)
-  Have: 2 <= n.
-  (* Invariant *)
-  Have: P_Sorted(Mint_1, t_2, 0, i_1).
-  (* Invariant *)
-  Have: (0 <= i_1) /\ (i_1 <= n_1).
-  (* Then *)
-  Have: i_1 < n_1.
-  (* Invariant *)
-  Have: forall i_2 : Z. ((i_2 < i) -> ((j <= i_2) ->
-      (mv_0 < Mint_0[shift_sint32(t, i_2)]))).
-  (* Invariant *)
-  Have: ((j < i) -> P_Sorted(Mint_0, t, 0, x)).
-  (* Invariant *)
-  Have: ((j = i) -> P_Sorted(Mint_0, t, 0, i)).
-  (* Invariant *)
-  Have: (j <= i) /\ (0 <= j).
-  If 0 < j
-  Then { (* Then *) Have: Mint_0[shift_sint32(t, j - 1)] <= mv_0. }
-}
-Prove: P_Sorted(Mint_0[shift_sint32(t, j) <- mv_0], t, 0, x).
-Prover Alt-Ergo returns Valid (Qed:16ms) (141ms) (348)
-
-------------------------------------------------------------
-
-Goal Establishment of Invariant (file framacapp/Files/filename.c, line 16):
-Assume {
-  Type: is_sint32(n).
-  (* Heap *)
-  Have: (region(t.base) <= 0) /\ linked(Malloc_0).
-  (* Pre-condition *)
-  Have: valid_rw(Malloc_0, shift_sint32(t, 0), n).
-  (* Else *)
-  Have: 2 <= n.
-}
-Prove: P_Sorted(Mint_0, t, 0, 1).
-Prover Alt-Ergo returns Valid (11)
-
-------------------------------------------------------------
-
-Goal Preservation of Invariant (file framacapp/Files/filename.c, line 21):
-Let x = j - 1.
-Let x_1 = Mint_0[shift_sint32(t, x)].
-Let x_2 = 1 + i.
-Assume {
-  Type: is_sint32(i_1) /\ is_sint32(i) /\ is_sint32(j) /\ is_sint32(mv_0) /\
-      is_sint32(n) /\ is_sint32(n_1) /\ is_sint32(x) /\ is_sint32(x_1).
-  (* Heap *)
-  Have: (region(t_1.base) <= 0) /\ linked(Malloc_0).
-  (* Pre-condition *)
-  Have: valid_rw(Malloc_0, shift_sint32(t_1, 0), n).
-  (* Else *)
-  Have: 2 <= n.
-  (* Invariant *)
-  Have: P_Sorted(Mint_1, t_2, 0, i_1).
-  (* Invariant *)
-  Have: (0 <= i_1) /\ (i_1 <= n_1).
-  (* Then *)
-  Have: i_1 < n_1.
-  (* Invariant *)
-  Have: forall i_2 : Z. ((i_2 < i) -> ((j <= i_2) ->
-      (mv_0 < Mint_0[shift_sint32(t, i_2)]))).
-  (* Invariant *)
-  Have: ((j < i) -> P_Sorted(Mint_0, t, 0, x_2)).
-  (* Invariant *)
-  Have: ((j = i) -> P_Sorted(Mint_0, t, 0, i)).
-  (* Invariant *)
-  Have: (j <= i) /\ (0 <= j).
-  (* Then *)
-  Have: 0 < j.
-  (* Else *)
-  Have: mv_0 < x_1.
-}
-Prove: j <= x_2.
-Prover Alt-Ergo returns Valid (Qed:16ms) (16ms) (28)
-
-------------------------------------------------------------
-
-Goal Establishment of Invariant (file framacapp/Files/filename.c, line 21):
-Prove: true.
-Prover Qed returns Valid
-
-------------------------------------------------------------
-
-Goal Preservation of Invariant (file framacapp/Files/filename.c, line 23):
-Prove: true.
-Prover Qed returns Valid
-
-------------------------------------------------------------
-
-Goal Establishment of Invariant (file framacapp/Files/filename.c, line 23):
-Prove: true.
-Prover Qed returns Valid
-
-------------------------------------------------------------
-
-Goal Preservation of Invariant (file framacapp/Files/filename.c, line 25):
-Let x = j - 1.
-Let x_1 = Mint_0[shift_sint32(t, x)].
-Let x_2 = 1 + i.
-Assume {
-  Type: is_sint32(i_1) /\ is_sint32(i) /\ is_sint32(j) /\ is_sint32(mv_0) /\
-      is_sint32(n) /\ is_sint32(n_1) /\ is_sint32(x) /\ is_sint32(x_1).
-  (* Goal *)
-  When: j <= i.
-  (* Heap *)
-  Have: (region(t_1.base) <= 0) /\ linked(Malloc_0).
-  (* Pre-condition *)
-  Have: valid_rw(Malloc_0, shift_sint32(t_1, 0), n).
-  (* Else *)
-  Have: 2 <= n.
-  (* Invariant *)
-  Have: P_Sorted(Mint_1, t_2, 0, i_1).
-  (* Invariant *)
-  Have: (0 <= i_1) /\ (i_1 <= n_1).
-  (* Then *)
-  Have: i_1 < n_1.
-  (* Invariant *)
-  Have: forall i_2 : Z. ((i_2 < i) -> ((j <= i_2) ->
-      (mv_0 < Mint_0[shift_sint32(t, i_2)]))).
-  (* Invariant *)
-  Have: ((j < i) -> P_Sorted(Mint_0, t, 0, x_2)).
-  (* Invariant *)
-  Have: ((j = i) -> P_Sorted(Mint_0, t, 0, i)).
-  (* Invariant *)
-  Have: 0 <= j.
-  (* Then *)
-  Have: 0 < j.
-  (* Else *)
-  Have: mv_0 < x_1.
-}
-Prove: P_Sorted(Mint_0[shift_sint32(t, j) <- x_1], t, 0, x_2).
-Prover Alt-Ergo returns Valid (Qed:16ms) (109ms) (358)
-
-------------------------------------------------------------
-
-Goal Establishment of Invariant (file framacapp/Files/filename.c, line 25):
-Prove: true.
-Prover Qed returns Valid
-
-------------------------------------------------------------
-
-Goal Preservation of Invariant (file framacapp/Files/filename.c, line 27):
-Let x = j - 1.
-Let x_1 = Mint_0[shift_sint32(t, x)].
-Assume {
-  Type: is_sint32(i_1) /\ is_sint32(i_2) /\ is_sint32(j) /\
-      is_sint32(mv_0) /\ is_sint32(n) /\ is_sint32(n_1) /\ is_sint32(x) /\
-      is_sint32(x_1).
-  (* Goal *)
-  When: (i < i_2) /\ (j <= (1 + i)).
-  (* Heap *)
-  Have: (region(t_1.base) <= 0) /\ linked(Malloc_0).
-  (* Pre-condition *)
-  Have: valid_rw(Malloc_0, shift_sint32(t_1, 0), n).
-  (* Else *)
-  Have: 2 <= n.
-  (* Invariant *)
-  Have: P_Sorted(Mint_1, t_2, 0, i_1).
-  (* Invariant *)
-  Have: (0 <= i_1) /\ (i_1 <= n_1).
-  (* Then *)
-  Have: i_1 < n_1.
-  (* Invariant *)
-  Have: forall i_3 : Z. ((i_3 < i_2) -> ((j <= i_3) ->
-      (mv_0 < Mint_0[shift_sint32(t, i_3)]))).
-  (* Invariant *)
-  Have: ((j < i_2) -> P_Sorted(Mint_0, t, 0, 1 + i_2)).
-  (* Invariant *)
-  Have: ((j = i_2) -> P_Sorted(Mint_0, t, 0, i_2)).
-  (* Invariant *)
-  Have: (j <= i_2) /\ (0 <= j).
-  (* Then *)
-  Have: 0 < j.
-  (* Else *)
-  Have: mv_0 < x_1.
-}
-Prove: mv_0 < Mint_0[shift_sint32(t, j) <- x_1][shift_sint32(t, i)].
-Prover Alt-Ergo returns Valid (16ms) (37)
-
-------------------------------------------------------------
-
-Goal Establishment of Invariant (file framacapp/Files/filename.c, line 27):
-Prove: true.
-Prover Qed returns Valid
-
-------------------------------------------------------------
-
-Goal Decreasing of Loop variant at loop (file framacapp/Files/filename.c, line 18):
-Let x = 1 + i_1.
-Assume {
-  Type: is_sint32(i) /\ is_sint32(i_1) /\ is_sint32(j) /\ is_sint32(mv_0) /\
-      is_sint32(n_2) /\ is_sint32(n) /\ is_sint32(n_1) /\ is_sint32(x).
-  (* Heap *)
-  Have: (region(t.base) <= 0) /\ linked(Malloc_0).
-  (* Pre-condition *)
-  Have: valid_rw(Malloc_0, shift_sint32(t, 0), n_2).
-  (* Else *)
-  Have: 2 <= n_2.
-  (* Invariant *)
-  Have: P_Sorted(Mint_0, t_1, 0, i).
+  Have: (0 < n) /\ valid_rw(Malloc_0, shift_sint32(t, 0), n).
   (* Invariant *)
   Have: (0 <= i) /\ (i <= n_1).
-  (* Then *)
-  Have: i < n_1.
-  (* Invariant *)
-  Have: forall i_2 : Z. ((i_2 < i_1) -> ((j <= i_2) ->
-      (mv_1 < Mint_1[shift_sint32(t_2, i_2)]))).
-  (* Invariant *)
-  Have: ((j < i_1) -> P_Sorted(Mint_1, t_2, 0, x)).
-  (* Invariant *)
-  Have: ((j = i_1) -> P_Sorted(Mint_1, t_2, 0, i_1)).
-  (* Invariant *)
-  Have: (j <= i_1) /\ (0 <= j).
-  If 0 < j
-  Then {
-    Have: (Mint_1 = Mint_2) /\ (mv_1 = mv_0) /\ (t_2 = t_3).
-    (* Then *)
-    Have: Mint_2[shift_sint32(t_3, j - 1)] <= mv_0.
-  }
+  (* Else *)
+  Have: n_1 <= i.
 }
-Prove: (i + n) <= (i_1 + n_1).
-Prover Alt-Ergo returns Unknown (Qed:16ms) (66ms)
+Prove: L_sum(Mint_0, t, 0, n) = x.
+Prover Alt-Ergo returns Timeout (10s)
 
 ------------------------------------------------------------
 
-Goal Positivity of Loop variant at loop (file framacapp/Files/filename.c, line 18):
+Goal Preservation of Invariant (file framacapp/Files/test/sum_array.c, line 64):
+Let x = 1 + i.
+Let x_1 = Mint_0[shift_sint32(t, i)].
+Let x_2 = L_sum(Mint_0, t, 0, i).
+Let x_3 = x_1 + x_2.
+Assume {
+  Type: is_sint32(i) /\ is_sint32(n) /\ is_sint32(n_1) /\ is_sint32(x) /\
+      is_sint32(x_1) /\ is_sint32(x_2) /\ is_sint32(x_3).
+  (* Heap *)
+  Have: (region(t_1.base) <= 0) /\ linked(Malloc_0).
+  (* Pre-condition *)
+  Have: (0 < n_1) /\ valid_rw(Malloc_0, shift_sint32(t_1, 0), n_1).
+  (* Invariant *)
+  Have: (0 <= i) /\ (i <= n).
+  (* Then *)
+  Have: i < n.
+}
+Prove: (x_3 = L_sum(Mint_0, t, 0, x)) /\ ((-1) <= i).
+Prover Alt-Ergo returns Valid (34)
+
+------------------------------------------------------------
+
+Goal Establishment of Invariant (file framacapp/Files/test/sum_array.c, line 64):
+Assume {
+  Type: is_sint32(n).
+  (* Heap *)
+  Have: (region(t.base) <= 0) /\ linked(Malloc_0).
+  (* Pre-condition *)
+  Have: (0 < n) /\ valid_rw(Malloc_0, shift_sint32(t, 0), n).
+}
+Prove: L_sum(Mint_0, t, 0, 0) = 0.
+Prover Alt-Ergo returns Valid (16ms) (14)
+
+------------------------------------------------------------
+
+Goal Decreasing of Loop variant at loop (file framacapp/Files/test/sum_array.c, line 67):
 Prove: true.
 Prover Qed returns Valid
 
 ------------------------------------------------------------
 
-Goal Decreasing of Loop variant at loop (file framacapp/Files/filename.c, line 28):
+Goal Positivity of Loop variant at loop (file framacapp/Files/test/sum_array.c, line 67):
+Prove: true.
+Prover Qed returns Valid
+
+------------------------------------------------------------
+------------------------------------------------------------
+  Function test2
+------------------------------------------------------------
+
+Goal Post-condition (file framacapp/Files/test/sum_array.c, line 77) in 'test2':
+Let x = L_sum(Mint_0, t, 0, n).
+Let x_1 = n_1 + x.
+Let x_2 = L_sum(Mint_1, t_1, 0, n_1).
+Assume {
+  Type: is_sint32(n) /\ is_sint32(n_1) /\ is_sint32(x_2 - x).
+  (* Heap *)
+  Have: (region(t.base) <= 0) /\ linked(Malloc_0).
+  (* Pre-condition *)
+  Have: (0 < n) /\ valid_rw(Malloc_0, shift_sint32(t, 0), n).
+  (* Invariant *)
+  Have: (x <= x_2) /\ (x_2 <= x_1).
+  (* Else *)
+  Have: x_1 <= x_2.
+}
+Prove: (n + x) = L_sum(Mint_1, t, 0, n).
+Prover Alt-Ergo returns Timeout (Qed:16ms) (10s)
+
+------------------------------------------------------------
+
+Goal Preservation of Invariant (file framacapp/Files/test/sum_array.c, line 81):
+Let x = L_sum(Mint_0, t, 0, n).
+Let x_1 = L_sum(Mint_1, t_1, 0, n_1).
+Let x_2 = -x_1.
+Let x_3 = x - x_1.
+Let a = shift_sint32(t, x_3).
+Let x_4 = Mint_0[a].
+Let x_5 = 1 + x_4.
+Let m = Mint_0[a <- x_5].
+Let x_6 = 1 + x - x_1.
+Let x_7 = L_sum(m, t, 0, n).
+Let x_8 = n + x_1.
+Let x_9 = 1 + x.
+Assume {
+  Type: is_sint32(n_1) /\ is_sint32(n) /\ is_sint32(x_3) /\ is_sint32(x_6) /\
+      is_sint32(x_4) /\ is_sint32(x_5).
+  (* Heap *)
+  Have: (region(t_1.base) <= 0) /\ linked(Malloc_0).
+  (* Pre-condition *)
+  Have: (0 < n_1) /\ valid_rw(Malloc_0, shift_sint32(t_1, 0), n_1).
+  (* Invariant *)
+  Have: (x_1 <= x) /\ (x <= x_8).
+  (* Then *)
+  Have: x < x_8.
+  (* Assertion *)
+  Have: (x_4 + L_sum(Mint_0, t, 0, x_3) + L_sum(Mint_0, t, x_6, n)) = x.
+  (* Assertion *)
+  Have: (1 + x_4 + L_sum(m, t, 0, x_3) + L_sum(m, t, x_6, n)) = x_7.
+}
+Prove: (x_9 = x_7) /\ (x_1 <= x_9).
+Prover Alt-Ergo returns Timeout (10s)
+
+------------------------------------------------------------
+
+Goal Establishment of Invariant (file framacapp/Files/test/sum_array.c, line 81):
 Prove: true.
 Prover Qed returns Valid
 
 ------------------------------------------------------------
 
-Goal Positivity of Loop variant at loop (file framacapp/Files/filename.c, line 28):
+Goal Assertion (file framacapp/Files/test/sum_array.c, line 87):
+Let x = L_sum(Mint_0, t, 0, n).
+Let x_1 = L_sum(Mint_1, t_1, 0, n_1).
+Let x_2 = n + x_1.
+Let x_3 = -x_1.
+Let x_4 = x - x_1.
+Let x_5 = Mint_0[shift_sint32(t, x_4)].
+Assume {
+  Type: is_sint32(n_1) /\ is_sint32(n) /\ is_sint32(x_4) /\ is_sint32(x_5).
+  (* Heap *)
+  Have: (region(t_1.base) <= 0) /\ linked(Malloc_0).
+  (* Pre-condition *)
+  Have: (0 < n_1) /\ valid_rw(Malloc_0, shift_sint32(t_1, 0), n_1).
+  (* Invariant *)
+  Have: (x_1 <= x) /\ (x <= x_2).
+  (* Then *)
+  Have: x < x_2.
+}
+Prove: (x_5 + L_sum(Mint_0, t, 0, x_4) + L_sum(Mint_0, t, 1 + x - x_1, n))
+         = x.
+Prover Alt-Ergo returns Valid (16ms) (78)
+
+------------------------------------------------------------
+
+Goal Assertion (file framacapp/Files/test/sum_array.c, line 89):
+Let x = L_sum(Mint_0, t, 0, n).
+Let x_1 = L_sum(Mint_1, t_1, 0, n_1).
+Let x_2 = -x_1.
+Let x_3 = x - x_1.
+Let x_4 = 1 + x - x_1.
+Let a = shift_sint32(t, x_3).
+Let x_5 = Mint_0[a].
+Let x_6 = n + x_1.
+Let x_7 = 1 + x_5.
+Let m = Mint_0[a <- x_7].
+Assume {
+  Type: is_sint32(n_1) /\ is_sint32(n) /\ is_sint32(x_3) /\ is_sint32(x_5) /\
+      is_sint32(x_7).
+  (* Heap *)
+  Have: (region(t_1.base) <= 0) /\ linked(Malloc_0).
+  (* Pre-condition *)
+  Have: (0 < n_1) /\ valid_rw(Malloc_0, shift_sint32(t_1, 0), n_1).
+  (* Invariant *)
+  Have: (x_1 <= x) /\ (x <= x_6).
+  (* Then *)
+  Have: x < x_6.
+  (* Assertion *)
+  Have: (x_5 + L_sum(Mint_0, t, 0, x_3) + L_sum(Mint_0, t, x_4, n)) = x.
+}
+Prove: (1 + x_5 + L_sum(m, t, 0, x_3) + L_sum(m, t, x_4, n))
+         = L_sum(m, t, 0, n).
+Prover Alt-Ergo returns Valid (Qed:16ms) (47ms) (81)
+
+------------------------------------------------------------
+
+Goal Assigns (file framacapp/Files/test/sum_array.c, line 76) in 'test2' (1/2):
+Effect at line 85
 Prove: true.
 Prover Qed returns Valid
+
+------------------------------------------------------------
+
+Goal Assigns (file framacapp/Files/test/sum_array.c, line 76) in 'test2' (2/2):
+Effect at line 85
+Assume {
+  Type: is_sint32(n).
+  (* Heap *)
+  Have: (region(t.base) <= 0) /\ linked(Malloc_0).
+  (* Pre-condition *)
+  Have: (0 < n) /\ valid_rw(Malloc_0, shift_sint32(t, 0), n).
+}
+Prove: false.
+Prover Alt-Ergo returns Unknown (64ms)
+
+------------------------------------------------------------
+
+Goal Decreasing of Loop variant at loop (file framacapp/Files/test/sum_array.c, line 85):
+Prove: true.
+Prover Qed returns Valid
+
+------------------------------------------------------------
+
+Goal Positivity of Loop variant at loop (file framacapp/Files/test/sum_array.c, line 85):
+Prove: true.
+Prover Qed returns Valid (16ms)
 
 ------------------------------------------------------------

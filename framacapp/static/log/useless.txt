@@ -2,36 +2,27 @@
 [kernel] Parsing framacapp/Files/filename.c (with preprocessing)
 framacapp/Files/filename.c:7:[kernel] warning: parsing obsolete ACSL construct '\valid_range(addr,min,max)'. '\valid(addr+(min..max))' should be used instead.
 [wp] Running WP plugin...
-[rte] annotating function insert_sort
+[wp] warning: Missing RTE guards
 framacapp/Files/filename.c:28:[wp] warning: Missing assigns clause (assigns 'everything' instead)
 framacapp/Files/filename.c:18:[wp] warning: Missing assigns clause (assigns 'everything' instead)
-[wp] 26 goals scheduled
+[wp] 17 goals scheduled
 [wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_established : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_post : Unknown (68ms)
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_preserved : Unknown (Qed:16ms) (187ms)
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_2_preserved : Valid
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_preserved : Unknown (Qed:16ms) (328ms)
+[wp] [Alt-Ergo] Goal typed_insert_sort_post : Unknown (325ms)
 [wp] [Qed] Goal typed_insert_sort_loop_inv_3_established : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_mem_access : Unknown (Qed:16ms) (119ms)
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_2_established : Valid
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_2_preserved : Valid
 [wp] [Qed] Goal typed_insert_sort_loop_inv_4_established : Valid
 [wp] [Qed] Goal typed_insert_sort_loop_inv_4_preserved : Valid
 [wp] [Qed] Goal typed_insert_sort_loop_inv_5_established : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_3_preserved : Valid
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_2_established : Valid
 [wp] [Qed] Goal typed_insert_sort_loop_inv_6_established : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_6_preserved : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_signed_overflow : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_mem_access_2 : Unknown (Qed:16ms) (127ms)
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_5_preserved : Valid
-[wp] [Qed] Goal typed_insert_sort_assert_rte_signed_overflow_3 : Valid
-[wp] [Qed] Goal typed_insert_sort_assert_rte_signed_overflow_2 : Valid
-[wp] [Qed] Goal typed_insert_sort_assert_rte_mem_access_4 : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_mem_access_3 : Unknown (Qed:16ms) (194ms)
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_3_preserved : Valid
 [wp] [Qed] Goal typed_insert_sort_loop_term_positive : Valid
 [wp] [Qed] Goal typed_insert_sort_loop_term_2_decrease : Valid
 [wp] [Qed] Goal typed_insert_sort_loop_term_2_positive : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_term_decrease : Unknown (Qed:16ms) (130ms)
-[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_signed_overflow_4 : Unknown (126ms)
-[wp] [Alt-Ergo] Goal typed_insert_sort_assert_rte_mem_access_5 : Unknown (Qed:16ms) (185ms)
-[wp] Proved goals:   18 / 26
-     Qed:            11  (16ms)
-     Alt-Ergo:        7  (16ms-83ms-219ms) (480) (unknown: 8)
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_6_preserved : Valid
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_5_preserved : Valid
+[wp] [Alt-Ergo] Goal typed_insert_sort_loop_term_decrease : Unknown (Qed:16ms) (268ms)
+[wp] Proved goals:   14 / 17
+     Qed:             8  (16ms)
+     Alt-Ergo:        6  (20ms-52ms-110ms) (unknown: 3)

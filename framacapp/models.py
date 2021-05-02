@@ -37,7 +37,7 @@ class File(models.Model):
 
 
 class Section(models.Model):
-    file = models.ForeignKey(File, on_delete=models.CASCADE)
+    file = models.ForeignKey(File, on_delete=models.CASCADE, blank=True, null=True)
     name = models.TextField(max_length=40, blank=True, null=True)
     description = models.TextField(max_length=40, blank=True, null=True)
     creation_date = models.DateTimeField()
