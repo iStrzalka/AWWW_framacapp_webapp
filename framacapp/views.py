@@ -99,7 +99,7 @@ def perform_coloring(input_string):
 
 
 # Groups program elements.
-def group_program_elements(program_elements):
+def group_program_elements(file, program_elements):
     iter1 = program_elements.find('------------------------------------------------------------') + 61
     if iter1 == 60:
         return program_elements
@@ -108,17 +108,55 @@ def group_program_elements(program_elements):
 
     program_elements = program_elements[iter1:]
     ret = ""
+    number = 0
     for group in program_elements.split('\n------------------------------------------------------------\n'):
         if group == '':
             break
+        if 'function' in group:
+            continue
+        description = group[:group.find(':')]
+
         iter1 = group.find('Goal') + 5
         iter2 = group.find('(', iter1) - 1
-        proved = 'Unknown'
+        goal = group[iter1:iter2]
+
+        iter1 = group.find('>', group.find('Prover')) + 1
+        iter2 = group.find('<', iter1)
+        prover = group[iter1:iter2]
+
+        status = 'Unknown'
         if 'Valid' in group:
-            proved = 'Valid'
-        ret += f'<div class="app-elements-section {proved}"><pre class title="{group[iter1:iter2]}">'
-        ret += group
-        ret += '</pre></div>'
+            status = 'Valid'
+
+        number_of_lines = group[:group.find('Prover')].count('\n')
+
+        iter1 = group.find('Prover') + 7
+        iter2 = group.find('returns', iter1) - 1
+        prover_for_data = group[iter1:iter2]
+
+        iter1 = iter2 + 9
+        iter2 = group.find('(', iter1) - 1
+        if iter2 == -2:
+            iter2 = len(group) - 1
+        status_for_data = group[iter1:iter2]
+        data = f'<div class="show_hide_div">' \
+               f'<div class="hidden_section {status}" id="hidden_section{number}" onclick="unhide_section({number})">' \
+               f' Goal : <b style="color:white">{goal}</b><br>... ({number_of_lines} line(s))<br> Prover: {prover_for_data}<br> Status: {status_for_data}' \
+               f'</div>' \
+               f'<div class="app-elements-section {status}" id="section{number}" onclick="hide_section({number})">' \
+               f'<pre class title="{goal}">{group}</pre>' \
+               f'</div>' \
+               f'</div>'
+        ret += data
+        Section.objects.create(file=file, goal=goal, description=description, prover=prover, status=status, data=data)
+        number += 1
+    return ret
+
+
+def get_program_elements(file):
+    ret = ""
+    for data in Section.objects.filter(file=file):
+        ret += data.data
     return ret
 
 
@@ -145,22 +183,24 @@ def get_content_from_file(file):
     return ret
 
 
-def get_program_elements(file):
+def render_program_elements(file):
     path = get_filepath(file)
+    Section.objects.filter(file=file).delete()
+
     program_elements = ""
     os.system(
         f'{path_to_linux} frama-c -wp -wp-print ./framacapp/Files/{path} >./framacapp/static/log/lastfile.txt')
 
     with open(f'{path_to_app}/static/log/lastfile.txt') as f:
         program_elements += f.read()
+
     program_elements = perform_coloring(program_elements)
-    program_elements = group_program_elements(program_elements)
+    program_elements = group_program_elements(file, program_elements)
     return program_elements
 
 
 def get_result_tab(request, filepath):
-    prover = ifNoneEmpty(request.POST.get("prover_name"))
-    prover = "Alt-Ergo"
+    prover = ifNoneEmpty(request.POST.get("prover"))
     if prover != '':
         prover = f' -wp-prover {prover} '
     wp_rte = ifNoneEmpty(request.POST.get("wp_rte"))
@@ -189,7 +229,7 @@ def run_prover(request):
         if not file.availability_flag:
             raise Http404
 
-        result = get_program_elements(file)
+        result = render_program_elements(file)
         data = {'result': result}
         return HttpResponse(json.dumps(data), content_type='application/json')
     else:

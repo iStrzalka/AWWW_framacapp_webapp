@@ -33,6 +33,13 @@ ul, li {
     padding-bottom: 0px;
 }
 
+.hidden_section {
+    /*display: flex;*/
+    padding:0px;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    font-family: monospace;
+}
 
 .sub_cat_box {display: none;}
 
@@ -109,10 +116,10 @@ ul, li {
 
 .app-elements-section {
     /*border-left-color: yellow;*/
-    display: flex;
     padding:0px;
     border-top: 1px solid white;
     border-bottom: 1px solid white;
+    display: none;
 }
 
 .Valid {

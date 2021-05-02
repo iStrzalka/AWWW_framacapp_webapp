@@ -38,9 +38,11 @@ class File(models.Model):
 
 class Section(models.Model):
     file = models.ForeignKey(File, on_delete=models.CASCADE, blank=True, null=True)
-    name = models.TextField(max_length=40, blank=True, null=True)
+    goal = models.TextField(max_length=40, blank=True, null=True)
     description = models.TextField(max_length=40, blank=True, null=True)
-    creation_date = models.DateTimeField()
-    category = models.TextField(max_length=40)
+    prover = models.TextField(max_length=40, blank=True, null=True)
     status = models.TextField(max_length=40)
     data = models.TextField(max_length=40)
+
+    def __str__(self):
+        return f"Section for file {self.file.name}, prover : {self.prover}, status : {self.status}"

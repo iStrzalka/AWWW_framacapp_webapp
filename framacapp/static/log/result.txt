@@ -1,6 +1,21 @@
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_preserved : Unknown (Qed:16ms) (328ms)
-[wp] [Alt-Ergo] Goal typed_insert_sort_post : Unknown (325ms)
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_term_decrease : Unknown (Qed:16ms) (268ms)
-[wp] Proved goals:   14 / 17
-Qed:             8  (16ms)
-Alt-Ergo:        6  (20ms-52ms-110ms) (unknown: 3)
+[wp] [Z3] Goal typed_insert_sort_loop_inv_2_preserved : Failed
+Why3 exits with status 1.
+[wp] [Z3] Goal typed_insert_sort_loop_inv_established : Failed
+Why3 exits with status 1.
+[wp] [Z3] Goal typed_insert_sort_loop_inv_preserved : Failed
+Why3 exits with status 1.
+[wp] [Z3] Goal typed_insert_sort_post : Failed
+Why3 exits with status 1.
+[wp] [Z3] Goal typed_insert_sort_loop_inv_3_preserved : Failed
+Why3 exits with status 1.
+[wp] [Z3] Goal typed_insert_sort_loop_inv_2_established : Failed
+Why3 exits with status 1.
+[wp] [Z3] Goal typed_insert_sort_loop_inv_5_preserved : Failed
+Why3 exits with status 1.
+[wp] [Z3] Goal typed_insert_sort_loop_inv_6_preserved : Failed
+Why3 exits with status 1.
+[wp] [Z3] Goal typed_insert_sort_loop_term_decrease : Failed
+Why3 exits with status 1.
+[wp] Proved goals:    8 / 17
+Qed:             8 
+Z3:              0  (failed: 9)

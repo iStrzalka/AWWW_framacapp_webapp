@@ -21,6 +21,16 @@ function toggleList(a){
     }
 }
 
+function hide_section(id) {
+    document.getElementById("section" + id).style.display = "none"
+    document.getElementById("hidden_section" + id).style.display = "block"
+}
+
+function unhide_section(id) {
+    document.getElementById("section" + id).style.display = "block"
+    document.getElementById("hidden_section" + id).style.display = "none"
+}
+
 function toggleChildren(id) {
    var elem = document.getElementById(id)
    if(!elem) alert("error: not found!")
