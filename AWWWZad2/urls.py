@@ -14,10 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from framacapp.views import home_view, add_dir_view,\
-    add_file_view, remove_file_dir_view, get_result, run_prover, load_file, \
-    add_file, add_filep, add_dir, add_dirp, remove, removep, reload_tree
+from django.urls import path, include
+from framacapp.views import home_view, get_result, run_prover, load_file, \
+    add_file, add_filep, add_dir, add_dirp, remove, removep, reload_tree, register_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,5 +30,7 @@ urlpatterns = [
     path('get_result/', get_result),
     path('load_file/', load_file),
     path('reload_tree/', reload_tree),
+    path('register/', register_page),
+    path('', include("django.contrib.auth.urls")),
     path('', home_view)
 ]

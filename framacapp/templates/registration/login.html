@@ -1,0 +1,48 @@
+<html lang="en-us" dir="ltr">
+<head>
+    <title>Log in | Django site admin</title>
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/nav_sidebar.css">
+    <script src="/static/admin/js/nav_sidebar.js" defer></script>
+
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/login.css">
+
+
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css">
+
+
+    <meta name="robots" content="NONE,NOARCHIVE">
+</head>
+
+<body class="login">
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+<div id="container">
+    <div id="header">
+        <div id="branding">
+            <h1 id="site-name"><a href="/">Login to site</a></h1>
+        </div>
+    </div>
+    <div class="main shifted" id="main">
+        <div class="content">
+            <div id="content" class="colM">
+                <div id="content-main">
+
+                    <form method="post" class="from-group">
+                        {% csrf_token %}
+                        {{ form | crispy }}
+                        <p>Don't have an account? Create one <a href="/register">here</a></p>
+                        <button type="submit" class="btn btn-success">Login</button>
+                    </form>
+                </div>
+                <br class="clear">
+            </div>
+            <div id="footer"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

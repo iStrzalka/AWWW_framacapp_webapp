@@ -422,9 +422,9 @@ def removep(request):
         if not id:
             id = -1
         if request.POST.get('isfile') is True:
-            File.objects.filter(id=id).delete()
+            File.objects.filter(id=id).update(availability_flag=True)
         else:
-            Directory.objects.filter(id=id).delete()
+            Directory.objects.filter(id=id).update(availability_flag=True)
         data = {'message': ''}
         return HttpResponse(json.dumps(data), content_type='application/json')
     else:
@@ -462,6 +462,20 @@ def reload_tree(request):
         return HttpResponse(json.dumps(data), content_type='application/json')
     else:
         raise Http404
+
+
+from django.contrib.auth.forms import UserCreationForm
+
+
+def register_page(request):
+    form = UserCreationForm()
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+    context = {'form': form}
+    return render(request, "basic_form.html", context)
 
 
 def add_dir_view(request, *args, **kwargs):
