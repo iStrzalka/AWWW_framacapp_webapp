@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from framacapp.views import home_view, get_result, run_prover, load_file, \
-    add_file, add_filep, add_dir, add_dirp, remove, removep, reload_tree, register_page
+    add_file, add_filep, add_dir, add_dirp, remove, removep, reload_tree
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,7 +30,6 @@ urlpatterns = [
     path('get_result/', get_result),
     path('load_file/', load_file),
     path('reload_tree/', reload_tree),
-    path('register/', register_page),
     path('', include("django.contrib.auth.urls")),
     path('', home_view)
 ]

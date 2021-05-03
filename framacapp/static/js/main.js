@@ -76,7 +76,6 @@ function add_filep() {
     fd.append("name", document.getElementById('id_name').value)
     fd.append("id_parent", document.getElementById('id_parent').value)
     fd.append("description", document.getElementById('id_description').value)
-    fd.append("id_owner", document.getElementById('id_owner').value)
     fd.append("file", document.getElementById('id_Provide_file').files[0])
 
     var xhr = new XMLHttpRequest();
@@ -107,7 +106,6 @@ function add_dirp() {
     fd.append("name", document.getElementById('id_namedir').value)
     fd.append("id_parent", document.getElementById('id_parentdir').value)
     fd.append("description", document.getElementById('id_descriptiondir').value)
-    fd.append("id_owner", document.getElementById('id_ownerdir').value)
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/add_dirp/", true)

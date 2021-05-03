@@ -1,7 +1,7 @@
 import json
 from time import sleep
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import os
 
 from django.views.decorators.csrf import csrf_exempt
@@ -19,16 +19,16 @@ path_to_linux = 'C:\\Windows\\System32\\wsl.exe'
 
 # Create your views here.
 # Checks whether directory or file is in database and whether it should be shown.
-def check_dir(name, isfile):
+def check_dir(name, isfile, user):
     obj = None
     if isfile:
         try:
-            obj = File.objects.get(name=name)
+            obj = File.objects.get(name=name, owner=user)
         except File.DoesNotExist:
             return False
     else:
         try:
-            obj = Directory.objects.get(name=name)
+            obj = Directory.objects.get(name=name, owner=user)
         except Directory.DoesNotExist:
             return False
 
@@ -37,7 +37,7 @@ def check_dir(name, isfile):
 
     while obj.parent is not None:
         parent = obj.parent
-        if not parent.availability_flag:
+        if not parent.availability_flag or not parent.owner == user:
             return False
         obj = parent
 
@@ -45,13 +45,13 @@ def check_dir(name, isfile):
 
 
 # Lists files from path.
-def list_files(path):
+def list_files(path, user):
     ret_str = "Files:<ul>"
     last_level = 0
     number = 0
     for root, dirs, files in os.walk(path):
         level = root.replace(path, '').count(os.sep)
-        if not check_dir(os.path.basename(root), False) and level != 0:
+        if not check_dir(os.path.basename(root), False, user) and level != 0:
             continue
         if level == 0:
             # ret_str += f'<li class="current">{indent}{os.path.basename(root)}/</li><ul>'
@@ -66,7 +66,7 @@ def list_files(path):
         number += 1
         last_level = level
         for f in files:
-            if not check_dir(f, True):
+            if not check_dir(f, True, user):
                 continue
             ret_str += f'<li style="list-style-image:url(/static/icons/icon.png); height:\'20px\'" ' \
                        f'onclick="get_file_contents(\'{f}\')">{f}</li>\n'
@@ -76,8 +76,12 @@ def list_files(path):
 
 
 def home_view(request, *args, **kwargs):
+    if request.user.is_anonymous:
+        return redirect('/login')
+
     context = {
-        'Files': list_files("./framacapp/Files"),
+        'Files': list_files("./framacapp/Files", request.user),
+        'User': request.user.username,
     }
     return render(request, "main.html", context)
 
@@ -116,7 +120,7 @@ def group_program_elements(file, program_elements):
     for group in program_elements.split('\n------------------------------------------------------------\n'):
         if group == '':
             break
-        if 'function' in group:
+        if 'Function' in group:
             continue
         description = group[:group.find(':')]
 
@@ -274,18 +278,12 @@ def add_file(request):
         whole_form += '<p><label for="id_parent">Parent:</label> <br>' \
                       '<select name="parent" id="id_parent">' \
                       '<option value="" selected>---------</option>'
-        for possible_parent in Directory.objects.filter(availability_flag=True):
+        for possible_parent in Directory.objects.filter(availability_flag=True, owner=request.user):
             whole_form += f'<option value="{possible_parent.id}">{str(possible_parent)}</option>'
         whole_form += '</select></p>'
 
         whole_form += '<p><label for="id_description">Description:</label> <br> ' \
                       '<textarea name="description" cols="40" rows="5" id="id_description"></textarea></p>'
-
-        whole_form += '<p><label for="id_owner">Owner:</label> <br> <select name="owner" required id="id_owner">' \
-                      '<option value="" selected>---------</option>'
-        for possible_owner in User.objects.all():
-            whole_form += f'<option value="{possible_owner.id}">{str(possible_owner)}</option>'
-        whole_form += '</select></p>'
 
         whole_form += '<p><label for="id_Provide_file">Provide file:</label> <br> ' \
                       '<input type="file" name="Provide_file" required id="id_Provide_file"></p>'
@@ -304,9 +302,7 @@ def add_filep(request):
     if parent:
         parent = Directory.objects.get(id=parent)
     description = request.POST.get('description)')
-    owner = request.POST.get('id_owner')
-    if owner:
-        owner = User.objects.get(id=owner)
+    owner = request.user
 
     filepath = f'{name}'
     if parent:
@@ -338,18 +334,12 @@ def add_dir(request):
         whole_form += '<p><label for="id_parent">Parent:</label> <br>' \
                       '<select name="parent" id="id_parentdir">' \
                       '<option value="" selected>---------</option>'
-        for possible_parent in Directory.objects.filter(availability_flag=True):
+        for possible_parent in Directory.objects.filter(availability_flag=True, owner=request.user):
             whole_form += f'<option value="{possible_parent.id}">{str(possible_parent)}</option>'
         whole_form += '</select></p>'
 
         whole_form += '<p><label for="id_description">Description:</label> <br> ' \
                       '<textarea name="description" cols="40" rows="5" id="id_descriptiondir"></textarea></p>'
-
-        whole_form += '<p><label for="id_owner">Owner:</label> <br> <select name="owner" required id="id_ownerdir">' \
-                      '<option value="" selected>---------</option>'
-        for possible_owner in User.objects.all():
-            whole_form += f'<option value="{possible_owner.id}">{str(possible_owner)}</option>'
-        whole_form += '</select></p>'
 
         whole_form += '<input type="button" onclick="add_dirp()" value="Submit">'
         data = {'form': whole_form}
@@ -365,9 +355,7 @@ def add_dirp(request):
     if parent:
         parent = Directory.objects.get(id=parent)
     description = request.POST.get('description)')
-    owner = request.POST.get('id_owner')
-    if owner:
-        owner = User.objects.get(id=owner)
+    owner = request.user
 
     filepath = f'{name}/'
     if parent:
@@ -395,7 +383,7 @@ def remove(request):
                       '<select name="Remove_Directory" required id="id_Remove_Directory">' \
                       '<option value="" selected>---------</option>'
 
-        for directory in Directory.objects.filter(availability_flag=True):
+        for directory in Directory.objects.filter(availability_flag=True, owner=request.user):
             whole_form += f'<option value="{directory.id}">{str(directory)}</option>'
         whole_form += '</select></p>'
 
@@ -405,7 +393,7 @@ def remove(request):
                       '<select name="Remove_File" required id="id_Remove_File">' \
                       '<option value="" selected>---------</option>'
 
-        for file in File.objects.filter(availability_flag=True):
+        for file in File.objects.filter(availability_flag=True, owner=request.user):
             whole_form += f'<option value="{file.id}">{str(file)}</option>'
         whole_form += '</select></p>'
 
@@ -458,66 +446,7 @@ def add_file_view(request, *args, **kwargs):
 def reload_tree(request):
     if request.is_ajax():
         sleep(1)
-        data = {'tree': list_files("./framacapp/Files")}
+        data = {'tree': list_files("./framacapp/Files", request.user)}
         return HttpResponse(json.dumps(data), content_type='application/json')
     else:
         raise Http404
-
-
-from django.contrib.auth.forms import UserCreationForm
-
-
-def register_page(request):
-    form = UserCreationForm()
-
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-    context = {'form': form}
-    return render(request, "basic_form.html", context)
-
-
-def add_dir_view(request, *args, **kwargs):
-    form = DirectoryForm(request.POST or None)
-    if form.is_valid():
-        directory = form.save(commit=False)
-        directory.creation_date = datetime.now()
-        directory.availability_flag = True
-        directory.save()
-
-        filepath = f'{directory.name}'
-        obj = directory
-        while obj.parent is not None:
-            parent = obj.parent
-            filepath = f'{parent.name}/{filepath}'
-            obj = parent
-        os.mkdir(f'framacapp/Files/{filepath}')
-        form = DirectoryForm()
-    context = {
-        'form': form
-    }
-    return render(request, "add_dir.html", context)
-
-
-def remove_file_dir_view(request, *args, **kwargs):
-    form = RemoveDirForm(request.POST or None)
-    if form.is_valid():
-        obj = form.cleaned_data['Remove_Directory']
-        obj.availability_flag = False
-        obj.save()
-        form = RemoveDirForm()
-
-    form2 = RemoveFileForm(request.POST or None)
-    if form2.is_valid():
-        obj = form2.cleaned_data['Remove_File']
-        obj.availability_flag = False
-        obj.save()
-        form2 = RemoveFileForm()
-
-    context = {
-        'form': form,
-        'form2': form2,
-        'Files': list_files("./framacapp/Files"),
-    }
-    return render(request, "remove_dir_file.html", context)
