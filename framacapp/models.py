@@ -29,6 +29,9 @@ class AccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    def delete_user(self):
+        self.User.delete()
+
 
 class User(AbstractBaseUser):
     name = models.TextField(max_length=40)

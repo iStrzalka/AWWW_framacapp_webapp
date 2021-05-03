@@ -1,28 +1,5 @@
 [kernel] Parsing FRAMAC_SHARE/libc/__fc_builtin_for_normalization.i (no preprocessing)
-[kernel] Parsing framacapp/Files/filename.c (with preprocessing)
-framacapp/Files/filename.c:7:[kernel] warning: parsing obsolete ACSL construct '\valid_range(addr,min,max)'. '\valid(addr+(min..max))' should be used instead.
+[kernel] Parsing framacapp/Files/ (with preprocessing)
 [wp] Running WP plugin...
-[wp] warning: Missing RTE guards
-framacapp/Files/filename.c:28:[wp] warning: Missing assigns clause (assigns 'everything' instead)
-framacapp/Files/filename.c:18:[wp] warning: Missing assigns clause (assigns 'everything' instead)
-[wp] 17 goals scheduled
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_established : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_preserved : Unknown (327ms)
-[wp] [Alt-Ergo] Goal typed_insert_sort_post : Unknown (Qed:16ms) (324ms)
-[wp] [Qed] Goal typed_insert_sort_loop_inv_3_established : Valid
-[wp] [Qed] Goal typed_insert_sort_loop_inv_4_preserved : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_2_preserved : Valid
-[wp] [Qed] Goal typed_insert_sort_loop_inv_4_established : Valid
-[wp] [Qed] Goal typed_insert_sort_loop_inv_5_established : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_2_established : Valid
-[wp] [Qed] Goal typed_insert_sort_loop_inv_6_established : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_3_preserved : Valid
-[wp] [Qed] Goal typed_insert_sort_loop_term_positive : Valid
-[wp] [Qed] Goal typed_insert_sort_loop_term_2_decrease : Valid
-[wp] [Qed] Goal typed_insert_sort_loop_term_2_positive : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_6_preserved : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_5_preserved : Valid
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_term_decrease : Unknown (Qed:16ms) (271ms)
-[wp] Proved goals:   14 / 17
-     Qed:             8  (16ms)
-     Alt-Ergo:        6  (20ms-54ms-120ms) (unknown: 3)
+[wp] 0 goal scheduled
+[wp] Proved goals:    0 / 0

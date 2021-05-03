@@ -419,30 +419,6 @@ def removep(request):
         raise Http404
 
 
-def add_file_view(request, *args, **kwargs):
-    form = FileForm(request.POST or None, request.FILES or None)
-    if form.is_valid():
-        file = form.save(commit=False)
-        file.creation_date = datetime.now()
-        file.availability_flag = True
-        file.save()
-
-        filepath = f'{file.name}'
-        obj = file
-        while obj.parent is not None:
-            parent = obj.parent
-            filepath = f'{parent.name}/{filepath}'
-            obj = parent
-        with open(f'framacapp/Files/{filepath}', 'wb+') as f:
-            for chunk in request.FILES["Provide_file"].chunks():
-                f.write(chunk)
-        form = FileForm()
-    context = {
-        'form': form
-    }
-    return render(request, "add_file.html", context)
-
-
 def reload_tree(request):
     if request.is_ajax():
         sleep(1)

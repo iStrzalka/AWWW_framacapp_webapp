@@ -1,6 +1,1 @@
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_inv_preserved : Unknown (327ms)
-[wp] [Alt-Ergo] Goal typed_insert_sort_post : Unknown (Qed:16ms) (324ms)
-[wp] [Alt-Ergo] Goal typed_insert_sort_loop_term_decrease : Unknown (Qed:16ms) (271ms)
-[wp] Proved goals:   14 / 17
-Qed:             8  (16ms)
-Alt-Ergo:        6  (20ms-54ms-120ms) (unknown: 3)
+[wp] Proved goals:    0 / 0
