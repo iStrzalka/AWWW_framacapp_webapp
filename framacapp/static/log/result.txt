@@ -1,1 +1,23 @@
-[wp] Proved goals:    0 / 0
+[wp] [Alt-Ergo] Goal typed_test1_loop_inv_preserved : Failed
+Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_test1_post : Failed
+Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_lemma_sum_footprint : Failed
+Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_lemma_sum3 : Failed
+Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_test2_post : Failed
+Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_test1_loop_inv_established : Failed
+Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_test2_loop_inv_preserved : Failed
+Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_test2_assert : Failed
+Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_test2_assert_2 : Failed
+Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_test2_assign_part2 : Failed
+Why3 exits with status 1.
+[wp] Proved goals:    6 / 16
+Qed:             6  (0.19ms-0.69ms-0.89ms)
+Alt-Ergo:        0  (failed: 10)

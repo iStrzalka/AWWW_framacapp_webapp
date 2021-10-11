@@ -14,7 +14,7 @@ from .forms import DirectoryForm, FileForm, RemoveDirForm, RemoveFileForm
 from datetime import datetime
 
 path_to_app = './framacapp'
-path_to_linux = 'C:\\Windows\\System32\\wsl.exe'
+path_to_linux = ''
 
 
 # Create your views here.
@@ -196,6 +196,7 @@ def render_program_elements(file):
     Section.objects.filter(file=file).delete()
 
     program_elements = ""
+    path = path.replace(' ', '\ ')
     os.system(
         f'{path_to_linux} frama-c -wp -wp-print ./framacapp/Files/{path} >./framacapp/static/log/lastfile.txt')
 
@@ -301,7 +302,7 @@ def add_filep(request):
     parent = request.POST.get('id_parent')
     if parent:
         parent = Directory.objects.get(id=parent)
-    description = request.POST.get('description)')
+    description = request.POST.get('description')
     owner = request.user
 
     filepath = f'{name}'
@@ -409,10 +410,10 @@ def removep(request):
         id = request.POST.get('id')
         if not id:
             id = -1
-        if request.POST.get('isfile') is True:
-            File.objects.filter(id=id).update(availability_flag=True)
+        if request.POST.get('isfile') == 'true':
+            File.objects.filter(id=id).update(availability_flag=False)
         else:
-            Directory.objects.filter(id=id).update(availability_flag=True)
+            Directory.objects.filter(id=id).update(availability_flag=False)
         data = {'message': ''}
         return HttpResponse(json.dumps(data), content_type='application/json')
     else:

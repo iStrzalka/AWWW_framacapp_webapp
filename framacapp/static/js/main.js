@@ -1,7 +1,50 @@
-var current_filename = ""
-var prover = ""
-var wp_rte = ""
-var wp_prop = ""
+var current_filename = "";
+var prover = "";
+var wp_rte = "";
+var wp_prop = "";
+var editor = "";
+
+$(document).ready(function() {
+
+    var code = $(".codemirror-textarea")[0];
+    editor = CodeMirror.fromTextArea(code, {
+        lineNumbers: true,
+        theme: "material",
+        mode: "text/x-csrc",
+    });
+    editor.setSize("60%", 686.69)
+
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method))
+    }
+
+    $.ajaxSetup({
+       crossDomain: false,
+       beforeSend: function(xhr, settings) {
+           if (!csrfSafeMethod(settings.type)) {
+               xhr.setRequestHeader("X-CSRFTOKEN", csrftoken)
+           }
+       }
+    });
+});
 
 function toggleList(a){
     if (a === 1) {
@@ -130,7 +173,7 @@ function remove_form() {
     })
 }
 
-async function remove(file) {
+function remove(file) {
     if (file === 'file') {
         $.ajax({
             type: "POST",
@@ -158,7 +201,7 @@ async function remove(file) {
             },
         })
     }
-    await reload_tree()
+    reload_tree()
     remove_form()
 }
 
@@ -195,8 +238,9 @@ function get_file_contents(filename) {
            data: {"filename" : filename},
            success: function(data) {
                document.getElementById('program-elements').innerHTML = data.program_elements;
-               document.getElementById('filecontent').innerHTML = data.content;
-           }
+            //    document.getElementById('filecontent').innerHTML = data.content;
+                editor.doc.setValue(data.content);
+            }
     })
 }
 
@@ -230,35 +274,3 @@ function changeresult() {
     })
     toggleList(3);
 }
-
-$(document).ready(function() {
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    const csrftoken = getCookie('csrftoken');
-
-    function csrfSafeMethod(method) {
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method))
-    }
-
-    $.ajaxSetup({
-       crossDomain: false,
-       beforeSend: function(xhr, settings) {
-           if (!csrfSafeMethod(settings.type)) {
-               xhr.setRequestHeader("X-CSRFTOKEN", csrftoken)
-           }
-       }
-    });
-});

@@ -1,5 +1,105 @@
-[kernel] Parsing FRAMAC_SHARE/libc/__fc_builtin_for_normalization.i (no preprocessing)
-[kernel] Parsing framacapp/Files/ (with preprocessing)
+[kernel] Parsing framacapp/Files/sum_array.c (with preprocessing)
 [wp] Running WP plugin...
-[wp] 0 goal scheduled
-[wp] Proved goals:    0 / 0
+[wp] warning: Missing RTE guards
+framacapp/Files/sum_array.c:67:[wp] warning: Missing assigns clause (assigns 'everything' instead)
+framacapp/Files/sum_array.c:85:[wp] warning: Missing assigns clause (assigns 'everything' instead)
+[wp] 16 goals scheduled
+------------------------------------------------------------
+--- Why3 (stderr) :
+------------------------------------------------------------
+[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
+No prover in /home/istrzalka/.why3.conf corresponds to "Alt-Ergo"
+
+------------------------------------------------------------
+------------------------------------------------------------
+--- Why3 (stderr) :
+------------------------------------------------------------
+[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
+No prover in /home/istrzalka/.why3.conf corresponds to "Alt-Ergo"
+
+------------------------------------------------------------
+------------------------------------------------------------
+--- Why3 (stderr) :
+------------------------------------------------------------
+[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
+No prover in /home/istrzalka/.why3.conf corresponds to "Alt-Ergo"
+
+------------------------------------------------------------
+------------------------------------------------------------
+--- Why3 (stderr) :
+------------------------------------------------------------
+[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
+No prover in /home/istrzalka/.why3.conf corresponds to "Alt-Ergo"
+
+------------------------------------------------------------
+[wp] [Alt-Ergo] Goal typed_test1_loop_inv_preserved : Failed
+    Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_test1_post : Failed
+    Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_lemma_sum_footprint : Failed
+    Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_lemma_sum3 : Failed
+    Why3 exits with status 1.
+[wp] [Qed] Goal typed_test1_loop_term_positive : Valid
+[wp] [Qed] Goal typed_test1_loop_term_decrease : Valid
+[wp] [Qed] Goal typed_test2_loop_inv_established : Valid
+------------------------------------------------------------
+--- Why3 (stderr) :
+------------------------------------------------------------
+[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
+No prover in /home/istrzalka/.why3.conf corresponds to "Alt-Ergo"
+
+------------------------------------------------------------
+------------------------------------------------------------
+--- Why3 (stderr) :
+------------------------------------------------------------
+[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
+No prover in /home/istrzalka/.why3.conf corresponds to "Alt-Ergo"
+
+------------------------------------------------------------
+------------------------------------------------------------
+--- Why3 (stderr) :
+------------------------------------------------------------
+[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
+No prover in /home/istrzalka/.why3.conf corresponds to "Alt-Ergo"
+
+------------------------------------------------------------
+[wp] [Alt-Ergo] Goal typed_test2_post : Failed
+    Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_test1_loop_inv_established : Failed
+    Why3 exits with status 1.
+[wp] [Qed] Goal typed_test2_assign_part1 : Valid
+------------------------------------------------------------
+--- Why3 (stderr) :
+------------------------------------------------------------
+[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
+No prover in /home/istrzalka/.why3.conf corresponds to "Alt-Ergo"
+
+------------------------------------------------------------
+[wp] [Alt-Ergo] Goal typed_test2_loop_inv_preserved : Failed
+    Why3 exits with status 1.
+[wp] [Qed] Goal typed_test2_loop_term_decrease : Valid
+[wp] [Alt-Ergo] Goal typed_test2_assert : Failed
+    Why3 exits with status 1.
+[wp] [Qed] Goal typed_test2_loop_term_positive : Valid
+------------------------------------------------------------
+--- Why3 (stderr) :
+------------------------------------------------------------
+[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
+No prover in /home/istrzalka/.why3.conf corresponds to "Alt-Ergo"
+
+------------------------------------------------------------
+------------------------------------------------------------
+--- Why3 (stderr) :
+------------------------------------------------------------
+[Config] reading extra configuration file /usr/share/frama-c/wp/why3/why3.conf
+No prover in /home/istrzalka/.why3.conf corresponds to "Alt-Ergo"
+
+------------------------------------------------------------
+[wp] [Alt-Ergo] Goal typed_test2_assert_2 : Failed
+    Why3 exits with status 1.
+[wp] [Alt-Ergo] Goal typed_test2_assign_part2 : Failed
+    Why3 exits with status 1.
+[wp] Proved goals:    6 / 16
+    Qed:             6  (0.19ms-0.69ms-0.89ms)
+    Alt-Ergo:        0  (failed: 10)

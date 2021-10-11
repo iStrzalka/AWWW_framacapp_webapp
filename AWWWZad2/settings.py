@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-r)hv-fz2h@2gnz!$upe*kuf^uk@s)z=6web)v_l!yi4%&4y=@u
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
+STATIC_ROOT = Path.home() / "nginx" / "static"
+ALLOWED_HOSTS = ['students.mimuw.edu.pl', 'localhost', '127.0.0.1']
 
 
 # Application definition
